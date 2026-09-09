@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+
+# Environment
+.env
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploaded CAD files
+uploads/
+*.dwg
+*.dxf
+
+# Generated reports
+reports/
+outputs/
+*.pdf
+
+# LibreDWG binaries
+tools/LibreDWG/
+
+# Node
+node_modules/
+
+# Build
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Windows
+Thumbs.db

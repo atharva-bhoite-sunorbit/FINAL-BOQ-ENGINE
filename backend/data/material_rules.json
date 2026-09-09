@@ -1,0 +1,13 @@
+{
+  "masonry": {
+    "cement_bags_per_m3": 7.0,
+    "sand_m3_per_m3": 0.3,
+    "bricks_per_m3": 500
+  },
+  "concrete": {
+    "cement_bags_per_m3": 8.0,
+    "sand_m3_per_m3": 0.45,
+    "aggregate_m3_per_m3": 0.9,
+    "steel_kg_per_m3": 100
+  }
+}

@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Construction BOQ Engine</title>
+
+    <link rel="stylesheet" href="/app/style.css">
+</head>
+
+<body>
+
+<div class="shell">
+
+    <!-- SIDEBAR -->
+    <aside>
+        <div class="brand">
+            <b>CONSTRUCTION</b>
+            <span>BOQ ENGINE</span>
+        </div>
+
+        <nav>
+            <a class="active" href="#overview">Overview</a>
+            <a href="#drawing-analysis">Drawing Analysis</a>
+            <a href="#materials-panel">Materials</a>
+            <a href="#boq-panel">BOQ</a>
+            <a href="#boq-panel">Reports</a>
+        </nav>
+
+        <small>DWG-first estimating workspace</small>
+    </aside>
+
+
+    <!-- MAIN -->
+    <main>
+
+        <!-- HEADER -->
+        <header id="overview">
+
+            <div>
+                <label>PROJECT WORKSPACE</label>
+
+                <h1>Construction BOQ Engine</h1>
+
+                <p>
+                    Upload a DWG and automatically analyze construction
+                    quantities, materials and BOQ.
+                </p>
+            </div>
+
+            <div id="health">
+                Checking engine…
+            </div>
+
+        </header>
+
+
+        <!-- UPLOAD SECTION -->
+        <section class="upload" id="drawing-analysis">
+
+            <div id="drop" class="drop">
+
+                <div class="icon">↑</div>
+
+                <h2>Upload DWG Drawing</h2>
+
+                <p>
+                    Drag & drop a .DWG file here
+                    or choose one from your computer.
+                </p>
+
+
+                <!-- FILE INPUT -->
+                <input
+                    id="file"
+                    name="file"
+                    type="file"
+                    accept=".dwg,application/acad,application/x-acad"
+                    hidden
+                >
+
+
+                <!-- UPLOAD BUTTON -->
+                <button
+                    id="choose"
+                    type="button"
+                    class="choose-btn"
+                >
+                    Choose DWG File
+                </button>
+
+
+                <!-- SELECTED FILE -->
+                <div id="name">
+                    No drawing selected
+                </div>
+
+            </div>
+
+
+            <!-- ANALYZE BUTTON -->
+            <button
+                id="analyze"
+                class="analyze"
+                type="button"
+                disabled
+            >
+                Analyze Drawing
+            </button>
+
+
+            <!-- MESSAGE -->
+            <div id="msg"></div>
+
+        </section>
+
+
+
+        <!-- RESULTS -->
+        <section id="results" class="hidden">
+
+
+            <!-- METRICS -->
+            <div class="metrics">
+
+                <div>
+                    <span>Entities</span>
+                    <strong id="entities">—</strong>
+                </div>
+
+                <div>
+                    <span>Layers</span>
+                    <strong id="layers">—</strong>
+                </div>
+
+                <div>
+                    <span>Units</span>
+                    <strong id="units">—</strong>
+                </div>
+
+                <div>
+                    <span>Element Types</span>
+                    <strong id="count">—</strong>
+                </div>
+
+            </div>
+
+
+
+            <!-- DIAGNOSTICS -->
+            <section class="panel diagnostics">
+
+                <h2>Parser Diagnostics</h2>
+
+                <div id="diagnostics">
+                    Waiting for analysis...
+                </div>
+
+            </section>
+
+
+
+            <!-- ELEMENTS + MATERIALS -->
+            <div class="grid">
+
+
+                <!-- ELEMENTS -->
+                <section class="panel">
+
+                    <h2>Construction Elements</h2>
+
+                    <div id="elements">
+                        <div class="empty">
+                            No analysis performed yet.
+                        </div>
+                    </div>
+
+                </section>
+
+
+
+                <!-- MATERIALS -->
+                <section
+                    class="panel"
+                    id="materials-panel"
+                >
+
+                    <h2>Material Requirement</h2>
+
+                    <div id="materials">
+                        <div class="empty">
+                            No material quantities calculated.
+                        </div>
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- BOQ -->
+            <section
+                class="panel"
+                id="boq-panel"
+            >
+
+                <div class="paneltop">
+
+                    <h2>Bill of Quantities</h2>
+
+                    <div>
+
+                        <a
+                            id="pdf"
+                            class="pdfbtn"
+                            href="#"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Generate / Open PDF
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="table">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>#</th>
+                                <th>Description</th>
+                                <th>Qty</th>
+                                <th>Unit</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="boq">
+
+                            <tr>
+                                <td
+                                    colspan="7"
+                                    class="empty"
+                                >
+                                    No BOQ generated yet.
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script
+    src="/app/script.js"
+    defer
+></script>
+
+</body>
+</html>
