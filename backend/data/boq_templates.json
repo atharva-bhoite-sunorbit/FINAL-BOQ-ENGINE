@@ -1,0 +1,37 @@
+{
+  "sections": {
+    "A": "Earthwork & Excavation",
+    "B": "Plain Cement Concrete (PCC)",
+    "C": "Reinforced Cement Concrete (RCC)",
+    "D": "Reinforcement Steel (Rebar)",
+    "E": "Masonry & Blockwork",
+    "F": "Plaster & Punning",
+    "G": "Waterproofing",
+    "H": "Flooring & Skirting",
+    "I": "False Ceiling",
+    "J": "Doors & Frames",
+    "K": "Windows & Glazing",
+    "L": "Partitions & Paneling",
+    "M": "Painting & Finishing",
+    "N": "Metal & Fabrication Works",
+    "O": "Electrical Systems",
+    "P": "Plumbing Systems",
+    "Q": "Sanitaryware & Fixtures",
+    "R": "HVAC & Ventilation",
+    "S": "External & Civil Works"
+  },
+  "descriptions": {
+    "BRICK_WALL": "Providing and constructing approved brick masonry in cement mortar 1:6 (1 cement : 6 coarse sand) including scaffolding, curing, raking joints and finishing complete.",
+    "AAC_BLOCK_WALL": "Providing and constructing AAC block masonry in approved thickness with thin-bed polymer adhesive mortar including scaffolding, curing, bonding and joints complete.",
+    "GLASS_ALUMINIUM_PARTITION": "Providing and fixing powder-coated aluminium framed glass partition with approved toughened float glass, EPDM beading, silicone sealant, hardware and installation complete.",
+    "GYPSUM_PARTITION": "Providing and fixing 75mm thick double-skin gypsum board partition with GI framework, approved glass wool insulation, jointing compound, screws and smooth finish complete.",
+    "VITRIFIED_TILE_FLOOR": "Providing and laying vitrified floor tiles (600x600mm or approved) with polymer-modified adhesive bed, spacers, epoxy grouting, cleaning and finishing complete.",
+    "RCC_COLUMN": "Providing and casting reinforced cement concrete in columns of specified grade including formwork, cover blocks, vibration, curing and finishing complete (reinforcement measured separately).",
+    "RCC_BEAM": "Providing and casting reinforced cement concrete in beams of specified grade including shuttering, propping, cover blocks, compaction and curing complete.",
+    "RCC_SLAB": "Providing and casting reinforced cement concrete in suspended floor/roof slabs of specified grade including centering, shuttering, leveling, vibration and curing complete.",
+    "CEMENT_PLASTER": "Providing and applying 15mm thick cement plaster in 1:4 mortar to internal/external wall surfaces including scaffolding, corner beads, curing and finishing smooth.",
+    "EMULSION_PAINT": "Providing and applying two coats of approved premium acrylic emulsion paint over a coat of primer and two coats of wall putty including surface preparation and finishing.",
+    "FLUSH_DOOR": "Providing and fixing 35mm thick solid core flush door shutter with approved wooden/WPC frame, stainless steel ball bearing hinges, mortise lock and hardware complete.",
+    "ALUMINIUM_WINDOW": "Providing and fixing powder-coated aluminium sliding/casement windows with float glass, EPDM weather stripping, rollers, fasteners and silicone perimeter sealant complete."
+  }
+}

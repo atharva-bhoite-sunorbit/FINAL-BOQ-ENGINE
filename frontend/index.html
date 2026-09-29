@@ -1,282 +1,308 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Construction BOQ Engine</title>
-
-    <link rel="stylesheet" href="/app/style.css">
-</head>
-
-<body>
-
-<div class="shell">
-
-    <!-- SIDEBAR -->
-    <aside>
-        <div class="brand">
-            <b>CONSTRUCTION</b>
-            <span>BOQ ENGINE</span>
-        </div>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BOQ & Material Takeoff Engine — Krisala Developers</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#overview" aria-label="Krisala Developers home">
+          <img src="/static/krisala-logo.svg" alt="Krisala Developers - Innovating Lifespaces" />
+        </a>
         <nav>
-            <a class="active" href="#overview">Overview</a>
-            <a href="#drawing-analysis">Drawing Analysis</a>
-            <a href="#materials-panel">Materials</a>
-            <a href="#boq-panel">BOQ</a>
-            <a href="#boq-panel">Reports</a>
+          <a class="nav-link active" data-tab="boq" href="#boq">BOQ Schedule</a>
+          <a class="nav-link" data-tab="materials" href="#materials">Material Takeoff</a>
+          <a class="nav-link" data-tab="elements" href="#elements">Detected Elements & Audit</a>
+          <a class="nav-link" data-tab="validation-report" href="#validation-report">CAD Validation Report</a>
+          <a class="nav-link" data-tab="rates" href="#rates">Rate Schedule</a>
+          <a class="nav-link" data-tab="validation" href="#validation">Benchmark Validation</a>
         </nav>
+        <div class="sidebar-footer">DWG-first estimating workspace<br><span>Krisala Developers</span></div>
+      </aside>
 
-        <small>DWG-first estimating workspace</small>
-    </aside>
-
-
-    <!-- MAIN -->
-    <main>
-
-        <!-- HEADER -->
-        <header id="overview">
-
-            <div>
-                <label>PROJECT WORKSPACE</label>
-
-                <h1>Construction BOQ Engine</h1>
-
-                <p>
-                    Upload a DWG and automatically analyze construction
-                    quantities, materials and BOQ.
-                </p>
-            </div>
-
-            <div id="health">
-                Checking engine…
-            </div>
-
+      <main class="content" id="overview">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">KRISALA DEVELOPERS · PROJECT WORKSPACE</p>
+            <h1>Construction BOQ Engine</h1>
+            <p class="subtitle">Exact DWG/DXF parsing, constituent material takeoff & auditable BOQ generation.</p>
+          </div>
+          <span class="engine-status">● Engine Ready (90%+ Accuracy)</span>
         </header>
 
-
-        <!-- UPLOAD SECTION -->
-        <section class="upload" id="drawing-analysis">
-
-            <div id="drop" class="drop">
-
-                <div class="icon">↑</div>
-
-                <h2>Upload DWG Drawing</h2>
-
-                <p>
-                    Drag & drop a .DWG file here
-                    or choose one from your computer.
-                </p>
-
-
-                <!-- FILE INPUT -->
-                <input
-                    id="file"
-                    name="file"
-                    type="file"
-                    accept=".dwg,application/acad,application/x-acad"
-                    hidden
-                >
-
-
-                <!-- UPLOAD BUTTON -->
-                <button
-                    id="choose"
-                    type="button"
-                    class="choose-btn"
-                >
-                    Choose DWG File
-                </button>
-
-
-                <!-- SELECTED FILE -->
-                <div id="name">
-                    No drawing selected
-                </div>
-
-            </div>
-
-
-            <!-- ANALYZE BUTTON -->
-            <button
-                id="analyze"
-                class="analyze"
-                type="button"
-                disabled
-            >
-                Analyze Drawing
-            </button>
-
-
-            <!-- MESSAGE -->
-            <div id="msg"></div>
-
+        <section class="panel upload-panel">
+          <label class="upload-box" for="drawing-file">
+            <input id="drawing-file" type="file" accept=".dwg,.dxf" multiple />
+            <span class="upload-icon">↑</span>
+            <strong>Upload DWG / DXF drawing</strong>
+            <small>Drag & drop AutoCAD DWG / DXF files or click to browse.</small>
+            <b>Choose Drawing</b>
+            <em id="file-name">No drawing selected</em>
+          </label>
+          <button id="generate-btn">Analyze Drawing & Generate BOQ</button>
+          <div id="status" class="status">Ready for upload.</div>
         </section>
 
-
-
-        <!-- RESULTS -->
-        <section id="results" class="hidden">
-
-
-            <!-- METRICS -->
-            <div class="metrics">
-
-                <div>
-                    <span>Entities</span>
-                    <strong id="entities">—</strong>
-                </div>
-
-                <div>
-                    <span>Layers</span>
-                    <strong id="layers">—</strong>
-                </div>
-
-                <div>
-                    <span>Units</span>
-                    <strong id="units">—</strong>
-                </div>
-
-                <div>
-                    <span>Element Types</span>
-                    <strong id="count">—</strong>
-                </div>
-
-            </div>
-
-
-
-            <!-- DIAGNOSTICS -->
-            <section class="panel diagnostics">
-
-                <h2>Parser Diagnostics</h2>
-
-                <div id="diagnostics">
-                    Waiting for analysis...
-                </div>
-
-            </section>
-
-
-
-            <!-- ELEMENTS + MATERIALS -->
-            <div class="grid">
-
-
-                <!-- ELEMENTS -->
-                <section class="panel">
-
-                    <h2>Construction Elements</h2>
-
-                    <div id="elements">
-                        <div class="empty">
-                            No analysis performed yet.
-                        </div>
-                    </div>
-
-                </section>
-
-
-
-                <!-- MATERIALS -->
-                <section
-                    class="panel"
-                    id="materials-panel"
-                >
-
-                    <h2>Material Requirement</h2>
-
-                    <div id="materials">
-                        <div class="empty">
-                            No material quantities calculated.
-                        </div>
-                    </div>
-
-                </section>
-
-            </div>
-
-
-
-            <!-- BOQ -->
-            <section
-                class="panel"
-                id="boq-panel"
-            >
-
-                <div class="paneltop">
-
-                    <h2>Bill of Quantities</h2>
-
-                    <div>
-
-                        <a
-                            id="pdf"
-                            class="pdfbtn"
-                            href="#"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Generate / Open PDF
-                        </a>
-
-                    </div>
-
-                </div>
-
-
-                <div class="table">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-                                <th>#</th>
-                                <th>Description</th>
-                                <th>Qty</th>
-                                <th>Unit</th>
-                                <th>Rate</th>
-                                <th>Amount</th>
-                                <th>Status</th>
-                            </tr>
-
-                        </thead>
-
-
-                        <tbody id="boq">
-
-                            <tr>
-                                <td
-                                    colspan="7"
-                                    class="empty"
-                                >
-                                    No BOQ generated yet.
-                                </td>
-                            </tr>
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-            </section>
-
+        <section class="panel document-panel hidden" id="document-panel">
+          <div class="section-heading"><div><p class="eyebrow">Processed drawings</p><h2>Select a drawing result</h2></div><span class="muted" id="document-count"></span></div>
+          <div id="document-list" class="document-list"></div>
         </section>
 
-    </main>
+        <section class="kpi-grid">
+          <div class="kpi"><span>Total BOQ Items</span><strong id="item-count">0</strong></div>
+          <div class="kpi"><span>Constituent Materials</span><strong id="material-count">0</strong></div>
+          <div class="kpi"><span>Total Material Cost</span><strong id="material-cost">₹0</strong></div>
+          <div class="kpi accent"><span>Total Project Cost</span><strong id="grand-total">₹0</strong></div>
+        </section>
 
-</div>
+        <div class="action-row">
+          <a id="excel-download" class="secondary-action primary-action hidden" href="#">Export Excel (.xlsx)</a>
+          <a id="pdf-download" class="secondary-action primary-action hidden" href="#">Export PDF</a>
+          <a id="material-excel-download" class="secondary-action hidden" href="#">Download Material Takeoff</a>
+          <a id="detailed-boq-download" class="secondary-action hidden" href="#">Download Detailed BOQ</a>
+        </div>
 
+        <section class="stats-grid" id="analysis">
+          <div class="stat"><span>CAD Entities</span><strong id="entity-count">—</strong></div>
+          <div class="stat"><span>Drawing Layers</span><strong id="layer-count">—</strong></div>
+          <div class="stat"><span>Units & Scale</span><strong id="unit-count">—</strong></div>
+          <div class="stat"><span>Classified Elements</span><strong id="element-count">—</strong></div>
+        </section>
 
-<!-- JAVASCRIPT -->
-<script
-    src="/app/script.js"
-    defer
-></script>
+        <div class="tabs">
+          <a class="tab-btn active" data-tab="boq" href="#boq">BOQ SCHEDULE</a>
+          <a class="tab-btn" data-tab="materials" href="#materials">MATERIAL TAKEOFF (MTO)</a>
+          <a class="tab-btn" data-tab="elements" href="#elements">DETECTED ELEMENTS (MULTI-SIGNAL)</a>
+          <a class="tab-btn" data-tab="validation-report" href="#validation-report">CAD VALIDATION REPORT</a>
+          <a class="tab-btn" data-tab="rates" href="#rates">RATE ANALYSIS</a>
+          <a class="tab-btn" data-tab="validation" href="#validation">BENCHMARK VALIDATION</a>
+        </div>
 
-</body>
+        <!-- Panel 1: BOQ Table -->
+        <section class="panel results-panel tab-panel" id="boq-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Generated schedule</p>
+              <h2>Construction Bill of Quantities (BOQ)</h2>
+            </div>
+            <span class="muted">Drawing Qty · Gross Qty · Opening Deductions · Net Qty · Wastage · Rate · Amount</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Sr.</th>
+                  <th>Item Code</th>
+                  <th>Description</th>
+                  <th>Unit</th>
+                  <th>Drawing Qty</th>
+                  <th>Base Qty</th>
+                  <th>Deductions</th>
+                  <th>Net Qty</th>
+                  <th>Wastage</th>
+                  <th>Final Qty</th>
+                  <th>Rate</th>
+                  <th>Amount</th>
+                  <th>Audit</th>
+                </tr>
+              </thead>
+              <tbody id="boq-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Panel 2: Material Takeoff (MTO) Table -->
+        <section class="panel results-panel tab-panel hidden" id="materials-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Constituent Bill of Materials</p>
+              <h2>Exact Material Takeoff (MTO)</h2>
+            </div>
+            <span class="muted" id="mto-summary-badge">Exact consumption factors based on CPWD / IS specifications</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Sr.</th>
+                  <th>Material Code</th>
+                  <th>Constituent Material</th>
+                  <th>Category</th>
+                  <th>Derived From</th>
+                  <th>Takeoff Qty</th>
+                  <th>Factor</th>
+                  <th>Wastage</th>
+                  <th>Required Qty</th>
+                  <th>Packaging Unit</th>
+                  <th>Material Rate</th>
+                  <th>Total Cost</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="materials-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Panel 3: Detected Elements & Multi-Signal Audit -->
+        <section class="panel results-panel tab-panel hidden" id="elements-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Multi-signal element classification</p>
+              <h2>Detected Construction Elements & Engineering Audit</h2>
+            </div>
+            <span class="muted" id="elements-summary-badge">Deterministic geometry extraction · Confidence scores · Assumptions</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Element ID</th>
+                  <th>Type</th>
+                  <th>Layer</th>
+                  <th>Confidence</th>
+                  <th>Primary Quantity</th>
+                  <th>Multi-Signal Triggers</th>
+                  <th>Engineering Assumptions</th>
+                  <th>CAD Source Handles</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="elements-body"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Panel 4: CAD Validation Report (Section 2) -->
+        <section class="panel results-panel tab-panel hidden" id="validation-report-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Section 2 CAD integrity report</p>
+              <h2>DWG / DXF Drawing Validation Report</h2>
+            </div>
+            <span class="muted" id="val-badge">Inspection completed</span>
+          </div>
+          <div class="val-grid" id="val-metrics">
+            <div class="val-card">
+              <span>File Integrity & Version</span>
+              <strong id="val-status-txt">—</strong>
+              <small id="val-version-txt">—</small>
+            </div>
+            <div class="val-card">
+              <span>Units & Coordinate Extents</span>
+              <strong id="val-units-txt">—</strong>
+              <small id="val-extents-txt">—</small>
+            </div>
+            <div class="val-card">
+              <span>Layers & Block Definitions</span>
+              <strong id="val-layers-blocks-txt">—</strong>
+              <small id="val-dim-text-txt">—</small>
+            </div>
+            <div class="val-card">
+              <span>Entities & Health</span>
+              <strong id="val-entities-txt">—</strong>
+              <small id="val-health-txt">—</small>
+            </div>
+          </div>
+          <div class="section-heading" style="margin-top:16px;">
+            <div>
+              <p class="eyebrow">Entity catalog</p>
+              <h3 style="margin:0;font-size:13px;">CAD Entities by Type (Non-Discarding Engine)</h3>
+            </div>
+          </div>
+          <div class="entity-grid" id="val-entity-breakdown"></div>
+        </section>
+
+        <!-- Panel 5: Rate Schedule -->
+        <section class="panel rates-panel tab-panel hidden" id="rates-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Rate schedule</p>
+              <h2>Project Unit Rates (INR)</h2>
+            </div>
+            <span class="muted">Editable benchmark rates (Material + Labour)</span>
+          </div>
+          <div id="rate-grid" class="rate-grid"></div>
+        </section>
+
+        <!-- Panel 6: Benchmark Validation -->
+        <section class="panel validation-panel tab-panel hidden" id="validation-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Benchmark comparison</p>
+              <h2>Reference Excel Validation</h2>
+            </div>
+            <span class="muted">Tolerance: 1%</span>
+          </div>
+          <div class="validation-actions">
+            <label class="reference-picker" for="reference-file">Choose reference Excel<input id="reference-file" type="file" accept=".xlsx,.xls,.json" /></label>
+            <button id="validate-btn" class="secondary-action">Validate Quantities</button>
+          </div>
+          <div id="validation-status" class="status">Upload a manually prepared Excel BOQ for verification.</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Reference Qty</th>
+                  <th>Generated Qty</th>
+                  <th>Unit</th>
+                  <th>Difference</th>
+                  <th>Difference %</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="validation-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Audit Traceability Drawer / Modal (Section 25) -->
+    <div id="trace-modal" class="modal-backdrop hidden">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3>Full Traceability Audit Chain (Section 25)</h3>
+          <button id="modal-close" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="trace-flow">
+            <div class="trace-step">
+              <span>1. BOQ Item</span>
+              <strong id="trace-boq-item">—</strong>
+            </div>
+            <span class="trace-arrow">→</span>
+            <div class="trace-step">
+              <span>2. Material & Spec</span>
+              <strong id="trace-material">—</strong>
+            </div>
+            <span class="trace-arrow">→</span>
+            <div class="trace-step">
+              <span>3. Element</span>
+              <strong id="trace-element">—</strong>
+            </div>
+            <span class="trace-arrow">→</span>
+            <div class="trace-step">
+              <span>4. Entity Handle</span>
+              <strong id="trace-handle">—</strong>
+            </div>
+            <span class="trace-arrow">→</span>
+            <div class="trace-step">
+              <span>5. CAD Coordinates</span>
+              <strong id="trace-coords">—</strong>
+            </div>
+          </div>
+          <table class="trace-detail-table">
+            <tbody id="trace-detail-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+  </body>
 </html>

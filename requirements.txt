@@ -1,5 +1,6 @@
-fastapi
-uvicorn[standard]
-python-multipart
-reportlab
-ezdxf
+fastapi==0.115.0
+uvicorn==0.30.6
+python-multipart==0.0.9
+reportlab==4.2.5
+ezdxf==1.4.2
+openpyxl==3.1.5

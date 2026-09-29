@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 112" role="img" aria-labelledby="title desc">
+  <title id="title">Krisala Developers</title>
+  <desc id="desc">Krisala Innovating Lifespaces logo</desc>
+  <g transform="translate(4 14)">
+    <path d="M52 0 0 42l52 42h43c12 0 22-10 22-22V22C117 10 107 0 95 0Z" fill="#171614"/>
+    <path d="m52 14-34 28 34 28h39c4 0 8-4 8-8V22c0-4-4-8-8-8Z" fill="#d9a62e"/>
+    <path d="m52 22-24 20 24 20h31c2 0 4-2 4-4V26c0-2-2-4-4-4Z" fill="#fff"/>
+  </g>
+  <text x="142" y="58" fill="#171614" font-family="Georgia, 'Times New Roman', serif" font-size="56" font-weight="700" letter-spacing="1">KRISALA</text>
+  <text x="147" y="94" fill="#171614" font-family="Arial, sans-serif" font-size="13" font-weight="700" letter-spacing="5">INNOVATING LIFESPACES</text>
+</svg>

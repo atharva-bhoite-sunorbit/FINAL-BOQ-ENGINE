@@ -1,0 +1,178 @@
+{
+  "layer_patterns": [
+    {
+      "pattern": ".*(WALL|MASONRY|BRICK|AAC|BLOCK).*",
+      "element_type": "WALL",
+      "subtype": "BRICK_WALL",
+      "material_hint": "BRICK",
+      "default_thickness": 0.15
+    },
+    {
+      "pattern": ".*(GLP|GLASS.*PART|AL_PART).*",
+      "element_type": "PARTITION",
+      "subtype": "GLASS_ALUMINIUM_PARTITION",
+      "material_hint": "GLASS",
+      "default_thickness": 0.075
+    },
+    {
+      "pattern": ".*(GYP.*PART|DRYWALL|I-PARTITION).*",
+      "element_type": "PARTITION",
+      "subtype": "GYPSUM_PARTITION",
+      "material_hint": "GYPSUM",
+      "default_thickness": 0.075
+    },
+    {
+      "pattern": ".*(AEROCON).*",
+      "element_type": "PARTITION",
+      "subtype": "AEROCON_PARTITION",
+      "material_hint": "AEROCON",
+      "default_thickness": 0.075
+    },
+    {
+      "pattern": ".*(COL|COLUMN|PILLAR|STR-COL).*",
+      "element_type": "COLUMN",
+      "subtype": "RCC_COLUMN",
+      "material_hint": "CONCRETE",
+      "default_thickness": 0.30
+    },
+    {
+      "pattern": ".*(BEAM|PLINTH-BEAM|TIE-BEAM|STR-BEAM).*",
+      "element_type": "BEAM",
+      "subtype": "RCC_BEAM",
+      "material_hint": "CONCRETE",
+      "default_thickness": 0.23
+    },
+    {
+      "pattern": ".*(SLAB|FLOOR-SLAB|ROOF-SLAB).*",
+      "element_type": "SLAB",
+      "subtype": "RCC_SLAB",
+      "material_hint": "CONCRETE",
+      "default_thickness": 0.15
+    },
+    {
+      "pattern": ".*(DOOR|DR).*",
+      "element_type": "DOOR",
+      "subtype": "FLUSH_DOOR",
+      "material_hint": "TIMBER",
+      "default_width": 0.90,
+      "default_height": 2.10
+    },
+    {
+      "pattern": ".*(WINDOW|WIN).*",
+      "element_type": "WINDOW",
+      "subtype": "ALUMINIUM_WINDOW",
+      "material_hint": "ALUMINIUM_GLASS",
+      "default_width": 1.20,
+      "default_height": 1.20
+    },
+    {
+      "pattern": ".*(FLOOR|TILE|VITRIFIED|ROOM|SPACE).*",
+      "element_type": "FLOOR",
+      "subtype": "VITRIFIED_TILE_FLOOR",
+      "material_hint": "TILE"
+    },
+    {
+      "pattern": ".*(CEIL|CLNG|FALSE).*",
+      "element_type": "CEILING",
+      "subtype": "GYPSUM_FALSE_CEILING",
+      "material_hint": "GYPSUM"
+    },
+    {
+      "pattern": ".*(PLAST|PLS).*",
+      "element_type": "PLASTER",
+      "subtype": "CEMENT_PLASTER",
+      "material_hint": "CEMENT_MORTAR",
+      "default_thickness": 0.015
+    },
+    {
+      "pattern": ".*(PNT|PAINT).*",
+      "element_type": "PAINT",
+      "subtype": "EMULSION_PAINT",
+      "material_hint": "PAINT"
+    },
+    {
+      "pattern": ".*(FOOTING|FOUNDATION|PAD).*",
+      "element_type": "FOOTING",
+      "subtype": "ISOLATED_FOOTING",
+      "material_hint": "CONCRETE"
+    },
+    {
+      "pattern": ".*(PILE.*CAP).*",
+      "element_type": "PILE_CAP",
+      "subtype": "RCC_PILE_CAP",
+      "material_hint": "CONCRETE"
+    },
+    {
+      "pattern": ".*(PILE).*",
+      "element_type": "PILE",
+      "subtype": "BORED_CAST_IN_SITU_PILE",
+      "material_hint": "CONCRETE"
+    },
+    {
+      "pattern": ".*(SHEAR.*WALL).*",
+      "element_type": "SHEAR_WALL",
+      "subtype": "RCC_SHEAR_WALL",
+      "material_hint": "CONCRETE"
+    },
+    {
+      "pattern": ".*(RETAIN.*WALL).*",
+      "element_type": "RETAINING_WALL",
+      "subtype": "RCC_RETAINING_WALL",
+      "material_hint": "CONCRETE"
+    },
+    {
+      "pattern": ".*(STAIR|STEP).*",
+      "element_type": "STAIRCASE",
+      "subtype": "RCC_DOG_LEGGED_STAIRCASE",
+      "material_hint": "CONCRETE"
+    },
+    {
+      "pattern": ".*(RAMP).*",
+      "element_type": "RAMP",
+      "subtype": "RCC_RAMP",
+      "material_hint": "CONCRETE"
+    },
+    {
+      "pattern": ".*(RAIL|HANDRAIL|BALUSTRADE).*",
+      "element_type": "RAILING",
+      "subtype": "SS_RAILING",
+      "material_hint": "STEEL"
+    },
+    {
+      "pattern": ".*(PARAPET).*",
+      "element_type": "PARAPET",
+      "subtype": "BRICK_PARAPET",
+      "material_hint": "BRICK"
+    },
+    {
+      "pattern": ".*(ROOF|SHEET|DECK).*",
+      "element_type": "ROOF",
+      "subtype": "METAL_ROOFING",
+      "material_hint": "STEEL"
+    },
+    {
+      "pattern": ".*(ELEC|LIGHT|POWER|CONDUIT).*",
+      "element_type": "ELECTRICAL",
+      "subtype": "ELECTRICAL_WIRING",
+      "material_hint": "COPPER_PVC"
+    },
+    {
+      "pattern": ".*(PLUMB|PIPE|WATER).*",
+      "element_type": "PLUMBING",
+      "subtype": "WATER_SUPPLY_PIPE",
+      "material_hint": "CPVC"
+    },
+    {
+      "pattern": ".*(SAN|TOILET|WASHROOM|WC).*",
+      "element_type": "SANITARY",
+      "subtype": "SANITARY_FIXTURE",
+      "material_hint": "CERAMIC"
+    },
+    {
+      "pattern": ".*(HVAC|DUCT|AC).*",
+      "element_type": "HVAC",
+      "subtype": "GI_DUCTING",
+      "material_hint": "GI_SHEET"
+    }
+  ]
+}

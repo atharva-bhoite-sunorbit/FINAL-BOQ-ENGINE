@@ -1,13 +1,187 @@
 {
-  "masonry": {
-    "cement_bags_per_m3": 7.0,
-    "sand_m3_per_m3": 0.3,
-    "bricks_per_m3": 500
+  "GLP-001": {
+    "name": "Glass Aluminium Partition",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-GLS-01", "name": "10mm Toughened Clear Glass", "category": "Glass & Aluminium", "factor": 1.05, "unit": "sqft", "rate": 180.0},
+      {"code": "MAT-ALU-02", "name": "Powder Coated Aluminium Sections", "category": "Glass & Aluminium", "factor": 0.45, "unit": "kg", "rate": 260.0},
+      {"code": "MAT-EPD-03", "name": "EPDM Gaskets & Sealant", "category": "Hardware & Sealants", "factor": 1.20, "unit": "rmt", "rate": 25.0}
+    ]
   },
-  "concrete": {
-    "cement_bags_per_m3": 8.0,
-    "sand_m3_per_m3": 0.45,
-    "aggregate_m3_per_m3": 0.9,
-    "steel_kg_per_m3": 100
+  "AEP-002": {
+    "name": "Aerocon Partition",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-AEP-01", "name": "Aerocon Precast Panels 75mm", "category": "Blocks & Panels", "factor": 1.05, "unit": "sqft", "rate": 140.0},
+      {"code": "MAT-GIC-02", "name": "GI Floor & Ceiling Channels", "category": "Metal Framework", "factor": 0.40, "unit": "rmt", "rate": 80.0},
+      {"code": "MAT-ADH-03", "name": "Jointing Adhesive Compound", "category": "Paints & Chemicals", "factor": 0.20, "unit": "kg", "rate": 45.0}
+    ]
+  },
+  "VFT-003": {
+    "name": "Vitrified Floor Tiles",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-TIL-01", "name": "Vitrified Tiles 600x600mm", "category": "Tiles & Stone", "factor": 1.05, "unit": "sqft", "rate": 85.0},
+      {"code": "MAT-ADH-02", "name": "Polymer Tile Adhesive", "category": "Cement & Mortar", "factor": 0.55, "unit": "kg", "rate": 16.0},
+      {"code": "MAT-GRT-03", "name": "Epoxy Tile Grout & Spacers", "category": "Paints & Chemicals", "factor": 0.05, "unit": "kg", "rate": 120.0}
+    ]
+  },
+  "GYP-004": {
+    "name": "Gypsum Board Partition",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-GYP-01", "name": "12.5mm Gypsum Plasterboard", "category": "Timber & Boards", "factor": 2.10, "unit": "sqft", "rate": 35.0},
+      {"code": "MAT-GIS-02", "name": "GI Studs & Track Channels", "category": "Metal Framework", "factor": 0.85, "unit": "rmt", "rate": 75.0},
+      {"code": "MAT-FAS-03", "name": "Drywall Screws & Fasteners", "category": "Hardware & Fasteners", "factor": 4.00, "unit": "nos", "rate": 1.5},
+      {"code": "MAT-JNT-04", "name": "Joint Compound & Fiber Tape", "category": "Paints & Chemicals", "factor": 0.25, "unit": "kg", "rate": 40.0}
+    ]
+  },
+  "PLY-005": {
+    "name": "Plywood Partition",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-PLY-01", "name": "12mm Commercial Plywood", "category": "Timber & Boards", "factor": 1.05, "unit": "sqft", "rate": 95.0},
+      {"code": "MAT-LAM-02", "name": "1mm Decorative Laminate", "category": "Timber & Boards", "factor": 1.05, "unit": "sqft", "rate": 65.0},
+      {"code": "MAT-TMB-03", "name": "Hardwood Framing Battens", "category": "Timber & Boards", "factor": 0.08, "unit": "cft", "rate": 900.0},
+      {"code": "MAT-GLU-04", "name": "Fevicol / Wood Adhesive", "category": "Paints & Chemicals", "factor": 0.12, "unit": "kg", "rate": 220.0}
+    ]
+  },
+  "MGP-006": {
+    "name": "Mixed Gypsum Partition",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-GYP-01", "name": "12.5mm Gypsum / Cement Board", "category": "Timber & Boards", "factor": 2.10, "unit": "sqft", "rate": 45.0},
+      {"code": "MAT-GIS-02", "name": "GI Studs & Track Channels", "category": "Metal Framework", "factor": 0.85, "unit": "rmt", "rate": 75.0},
+      {"code": "MAT-INS-03", "name": "Acoustic Glasswool Insulation", "category": "Insulation", "factor": 1.00, "unit": "sqft", "rate": 30.0}
+    ]
+  },
+  "PNT-007": {
+    "name": "Wall Painting System",
+    "wastage_percent": 3,
+    "constituents": [
+      {"code": "MAT-PTY-01", "name": "Acrylic Wall Putty (2 coats)", "category": "Paints & Chemicals", "factor": 0.14, "unit": "kg", "rate": 28.0},
+      {"code": "MAT-PRM-02", "name": "Interior Wall Primer", "category": "Paints & Chemicals", "factor": 0.008, "unit": "litres", "rate": 160.0},
+      {"code": "MAT-PNT-03", "name": "Premium Acrylic Emulsion Paint", "category": "Paints & Chemicals", "factor": 0.016, "unit": "litres", "rate": 320.0}
+    ]
+  },
+  "DOR-008": {
+    "name": "Doors & Hardware",
+    "wastage_percent": 0,
+    "constituents": [
+      {"code": "MAT-DOR-01", "name": "35mm Flush Door Shutter", "category": "Timber & Doors", "factor": 1.00, "unit": "nos", "rate": 3200.0},
+      {"code": "MAT-DFR-02", "name": "Wooden / WPC Door Frame", "category": "Timber & Doors", "factor": 1.00, "unit": "set", "rate": 1800.0},
+      {"code": "MAT-HDW-03", "name": "SS Mortise Lock & Handle Set", "category": "Hardware & Fittings", "factor": 1.00, "unit": "set", "rate": 950.0},
+      {"code": "MAT-HNG-04", "name": "Heavy SS Ball Bearing Hinges", "category": "Hardware & Fittings", "factor": 3.00, "unit": "nos", "rate": 90.0}
+    ]
+  },
+  "AAC-009": {
+    "name": "AAC Block Masonry",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-AAC-01", "name": "AAC Blocks 600x200x150mm", "category": "Blocks & Masonry", "factor": 1.35, "unit": "nos", "rate": 75.0},
+      {"code": "MAT-ADH-02", "name": "Thin-Bed Jointing Mortar", "category": "Cement & Mortar", "factor": 0.45, "unit": "kg", "rate": 15.0}
+    ]
+  },
+  "PLS-010": {
+    "name": "External Cement Plaster",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-CMT-01", "name": "OPC 53 Cement (50kg Bag)", "category": "Cement & Aggregates", "factor": 0.08, "unit": "bags", "rate": 380.0},
+      {"code": "MAT-SND-02", "name": "Plaster M-Sand / River Sand", "category": "Cement & Aggregates", "factor": 0.35, "unit": "cft", "rate": 55.0},
+      {"code": "MAT-WPF-03", "name": "Integral Waterproofing Liquid", "category": "Paints & Chemicals", "factor": 0.02, "unit": "litres", "rate": 180.0}
+    ]
+  },
+  "CPL-011": {
+    "name": "Internal Cement Plaster",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-CMT-01", "name": "OPC 53 Cement (50kg Bag)", "category": "Cement & Aggregates", "factor": 0.06, "unit": "bags", "rate": 380.0},
+      {"code": "MAT-SND-02", "name": "Plaster M-Sand / River Sand", "category": "Cement & Aggregates", "factor": 0.25, "unit": "cft", "rate": 55.0}
+    ]
+  },
+  "GPR-012": {
+    "name": "Gypsum Plaster / Punning",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-GPL-01", "name": "Gypsum Plaster (25kg Bag)", "category": "Paints & Chemicals", "factor": 0.045, "unit": "bags", "rate": 220.0}
+    ]
+  },
+  "FCL-013": {
+    "name": "False Ceiling",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-GYP-02", "name": "Gypsum Ceiling Board 9.5mm", "category": "Timber & Boards", "factor": 1.05, "unit": "sqft", "rate": 30.0},
+      {"code": "MAT-GIC-01", "name": "GI Perimeter & Main Channels", "category": "Metal Framework", "factor": 0.95, "unit": "rmt", "rate": 65.0},
+      {"code": "MAT-FAS-01", "name": "Hanger Rods & Ceiling Fasteners", "category": "Hardware & Fasteners", "factor": 0.20, "unit": "sets", "rate": 45.0}
+    ]
+  },
+  "WTR-014": {
+    "name": "Water Storage Tank",
+    "wastage_percent": 0,
+    "constituents": [
+      {"code": "MAT-TNK-01", "name": "Triple Layer Polyethylene Tank 1000L", "category": "Plumbing & Tanks", "factor": 1.00, "unit": "nos", "rate": 6500.0},
+      {"code": "MAT-VLV-02", "name": "Brass Ball Valve & Connectors Set", "category": "Plumbing & Tanks", "factor": 1.00, "unit": "set", "rate": 1200.0}
+    ]
+  },
+  "ROF-015": {
+    "name": "Roofing System",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-ROF-01", "name": "Pre-painted Galvalume Roofing Sheets", "category": "Roofing & Cladding", "factor": 1.08, "unit": "sqft", "rate": 85.0},
+      {"code": "MAT-SCR-02", "name": "Self-Drilling EPDM Screws", "category": "Hardware & Fasteners", "factor": 1.50, "unit": "nos", "rate": 6.0}
+    ]
+  },
+  "FIN-016": {
+    "name": "Architectural Finishing",
+    "wastage_percent": 3,
+    "constituents": [
+      {"code": "MAT-SLT-01", "name": "Neutral Silicone Sealant Cartridge", "category": "Hardware & Sealants", "factor": 0.02, "unit": "nos", "rate": 240.0},
+      {"code": "MAT-FLR-02", "name": "Floor Protection Sheet", "category": "Paints & Chemicals", "factor": 1.05, "unit": "sqft", "rate": 8.0}
+    ]
+  },
+  "WSR-017": {
+    "name": "Washroom Works",
+    "wastage_percent": 0,
+    "constituents": [
+      {"code": "MAT-WPF-01", "name": "2-Component Acrylic Waterproofing", "category": "Paints & Chemicals", "factor": 0.40, "unit": "kg", "rate": 180.0},
+      {"code": "MAT-SAN-02", "name": "Wall-Hung EWC with Concealed Cistern", "category": "Sanitaryware", "factor": 1.00, "unit": "set", "rate": 9500.0},
+      {"code": "MAT-FAU-03", "name": "CP Brass Diverter & Faucet Set", "category": "Sanitaryware", "factor": 1.00, "unit": "set", "rate": 4500.0}
+    ]
+  },
+  "RCC-021": {
+    "name": "RCC Structural Slab M25",
+    "wastage_percent": 3,
+    "constituents": [
+      {"code": "MAT-CMT-01", "name": "OPC 53 Cement (50kg Bag)", "category": "Cement & Aggregates", "factor": 8.20, "unit": "bags", "rate": 380.0},
+      {"code": "MAT-SND-01", "name": "M-Sand Fine Aggregate", "category": "Cement & Aggregates", "factor": 18.00, "unit": "cft", "rate": 55.0},
+      {"code": "MAT-AGG-02", "name": "Crushed Stone Aggregate 20mm", "category": "Cement & Aggregates", "factor": 32.00, "unit": "cft", "rate": 48.0},
+      {"code": "MAT-STL-03", "name": "TMT Steel Fe500D Rebar", "category": "Steel & Metals", "factor": 90.00, "unit": "kg", "rate": 68.0},
+      {"code": "MAT-PLY-02", "name": "Shuttering Film-Faced Plywood", "category": "Timber & Boards", "factor": 9.50, "unit": "sqft", "rate": 65.0}
+    ]
+  },
+  "ALU-036": {
+    "name": "Aluminium Windows",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-ALU-01", "name": "Anodized Aluminium Section Profiles", "category": "Glass & Aluminium", "factor": 0.85, "unit": "kg", "rate": 270.0},
+      {"code": "MAT-GLS-02", "name": "5mm Toughened Clear Glass", "category": "Glass & Aluminium", "factor": 1.05, "unit": "sqft", "rate": 110.0},
+      {"code": "MAT-EPD-01", "name": "EPDM Weather Seal & Rollers", "category": "Hardware & Sealants", "factor": 1.20, "unit": "rmt", "rate": 35.0}
+    ]
+  },
+  "PLB-040": {
+    "name": "Plumbing Water Supply",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-PIP-01", "name": "CPVC Pipe SDR 11 (20/25mm)", "category": "Plumbing & Piping", "factor": 1.05, "unit": "rmt", "rate": 95.0},
+      {"code": "MAT-FTG-02", "name": "CPVC Elbows, Tees & Couplers", "category": "Plumbing & Piping", "factor": 0.35, "unit": "nos", "rate": 35.0}
+    ]
+  },
+  "ELE-043": {
+    "name": "Electrical Conduits & Wiring",
+    "wastage_percent": 5,
+    "constituents": [
+      {"code": "MAT-CND-01", "name": "25mm Heavy Duty PVC Conduit", "category": "Electrical", "factor": 1.05, "unit": "rmt", "rate": 42.0},
+      {"code": "MAT-WIR-02", "name": "FRLS Copper Wire 1.5/2.5 sqmm", "category": "Electrical", "factor": 2.80, "unit": "rmt", "rate": 28.0}
+    ]
   }
 }

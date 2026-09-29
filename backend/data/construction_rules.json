@@ -1,0 +1,26 @@
+{
+  "defaults": {
+    "floor_height_m": 3.0,
+    "parapet_height_m": 1.0,
+    "skirting_height_m": 0.1,
+    "lintel_thickness_m": 0.15,
+    "dpc_thickness_m": 0.05,
+    "concrete_density_kg_m3": 2400,
+    "steel_density_kg_m3": 7850,
+    "brick_density_kg_m3": 1800,
+    "rebar_weight_formula": "D * D / 162.0"
+  },
+  "openings": {
+    "door_standard_width_m": 0.9,
+    "door_standard_height_m": 2.1,
+    "window_standard_width_m": 1.2,
+    "window_standard_height_m": 1.2,
+    "ventilator_standard_width_m": 0.6,
+    "ventilator_standard_height_m": 0.6
+  },
+  "tolerances": {
+    "parallel_wall_min_m": 0.07,
+    "parallel_wall_max_m": 0.38,
+    "max_building_span_m": 250.0
+  }
+}

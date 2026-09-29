@@ -1,47 +1,49 @@
-# Construction BOQ Engine - Project 3
+# Krisala Developers — Geometry-First BOQ Engine
 
-DWG-first construction quantity, material, BOQ and PDF workspace.
+A drawing-driven construction estimation engine with a FastAPI backend and a Krisala Developers workspace UI.
 
-## Pipeline
-DWG -> LibreDWG JSON + GeoJSON -> entity normalizer -> construction element detection -> geometry -> materials -> BOQ -> PDF
+## Features
+- Convert DWG to DXF through ODA/Teigha File Converter when configured
+- Parse DXF LINE, POLYLINE, LWPOLYLINE, ARC, CIRCLE, HATCH, INSERT, TEXT, MTEXT and DIMENSION entities
+- Preserve handles, layers, blocks, coordinates, measurements and parse errors
+- Classify and group drawing geometry before applying configurable measurement rules
+- Generate auditable quantities with source geometry and formulas
+- Upload a manually prepared Excel/JSON BOQ and compare quantities through `/validate-boq`
+- Download generated BOQ as PDF
 
-## Why two LibreDWG outputs?
-LibreDWG JSON preserves DWG entity/type metadata while GeoJSON exposes ordinary geometry. The engine combines both instead of trusting a single export. This is important for complex DWGs containing INSERTs, LWPOLYLINEs, HATCHes, dimensions and proxy/custom objects.
+## Run locally
 
-## Run
-1. Keep the complete Windows LibreDWG package in `tools\LibreDWG`.
-2. Confirm `tools\LibreDWG\dwgread.exe --help` works.
-3. Run `install.bat`.
-4. Run `start.bat`.
-5. Open `http://127.0.0.1:8000`.
+```bash
+cd D:\Sunorbit final BOQ
+py -3 -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
+```
 
-## Analysis output
-The dashboard now shows parser diagnostics for JSON, GeoJSON and DXF fallback. A machine-readable report is saved in `reports\<report_id>.json` beside the PDF.
+Then open:
 
-## Accuracy
-- Geometry-derived lengths/areas are preferred.
-- Detected blocks/layers/text are used for semantic element identification.
-- Height, thickness, reinforcement and material consumption are assumptions when the drawing does not provide those specifications.
-- Rates are configurable planning rates and are not an approved project SOR.
-- The engine must not be treated as a structural design or final procurement authority without engineer verification.
+```text
+http://localhost:8000
+```
 
-## Important
-Do not add filename-specific rules for one test drawing. New DWGs should go through the same parser and normalizer.
+## DWG requirements
 
+Native DWG conversion is deliberately not approximated. Install ODA File Converter or Teigha File Converter and expose `ODAFileConverter.exe` / `TeighaFileConverter.exe` on `PATH`, or configure an explicit executable:
 
-## Material estimation upgrade (Project 3 v4)
-This version expands the material takeoff to include:
-- RMC/concrete by footings, columns, beams and slabs
-- reinforcement steel by structural element
-- binding wire
-- masonry blocks, mortar, cement and sand
-- doors and windows
-- floor tiles, adhesive and grout
-- plaster area, cement and sand
-- primer, putty and paint
-- waterproofing when a measurable waterproofing area is detected
-- stair flights and estimated stair reinforcement
-- planning BOQ rates and PDF/audit JSON
+```powershell
+$env:BOQ_DWG_CONVERTER = 'C:\Path\To\ODAFileConverter.exe'
+py -3 -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
+```
 
-### Accuracy rule
-The engine prioritizes geometry and schedule data from the DWG. If a required design value is not present, it uses a configurable estimating assumption and labels it. Reinforcement cannot be called exact from geometry alone; exact steel requires readable reinforcement schedules/details. RMC is treated as the procurement form of concrete. Cement/sand/aggregate equivalent quantities are reference-only when RMC is selected so the BOQ does not double count concrete procurement.
+Alternatively, upload DXF directly.
+
+The parser does not use a project filename or sample drawing. Every uploaded file goes through the same conversion, entity extraction, unit normalization, classification, grouping, quantity, material, and rate stages. Batch processing returns one document result per file and reports files that could not be processed without discarding successful results.
+
+If the drawing has no measurable geometry or height/dimension evidence, the engine returns `NOT_DERIVABLE_FROM_DRAWING` instead of inventing quantities.
+
+## API
+
+- `POST /api/upload` — upload one DWG/DXF and generate an auditable BOQ
+- `POST /api/upload-batch` — upload multiple DWG/DXF files; each file is parsed independently with the same geometry/classification/measurement pipeline
+- `GET /api/boq/{doc_id}` — retrieve generated BOQ and calculation audit
+- `POST /validate-boq` — compare an Excel/JSON reference BOQ against generated quantities
+- `GET /api/validation/{doc_id}` — retrieve the latest validation result
+- `GET /api/download-pdf/{doc_id}` — download PDF report

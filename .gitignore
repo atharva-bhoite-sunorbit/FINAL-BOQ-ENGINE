@@ -1,44 +1,46 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
+
+# Pytest & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+pytest-of-*
+
+# Virtual Environments
 venv/
 .venv/
 env/
+ENV/
+env.bak/
+venv.bak/
 
-# Environment
+# Environment Variables
 .env
+.env.*
+!.env.example
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Uploaded CAD files
+# Temporary / Runtime Uploads & Generated Data
+backend/uploads/
 uploads/
-*.dwg
-*.dxf
-
-# Generated reports
+backend/temp/
+temp/
 reports/
 outputs/
-*.pdf
+geometry_pipeline_response.json
+last_response.json
 
-# LibreDWG binaries
-tools/LibreDWG/
-
-# Node
-node_modules/
-
-# Build
-dist/
-build/
-
-# IDE
+# IDE & Editor Files
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 
-# Logs
-*.log
-
-# Windows
+# Operating System Files
 Thumbs.db
+[Dd]esktop.ini
+.DS_Store
