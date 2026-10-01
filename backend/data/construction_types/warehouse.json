@@ -1,0 +1,49 @@
+{
+  "name": "Warehouse",
+  "icon": "\ud83d\udce6",
+  "subtypes": [
+    "Logistics Hub",
+    "Storage Yard",
+    "Cold Storage",
+    "Distribution Center",
+    "Fulfillment Facility"
+  ],
+  "default_subtype": "Logistics Hub",
+  "keywords": [
+    "storage",
+    "warehouse",
+    "loading bay",
+    "dock",
+    "dispatch",
+    "rack",
+    "racking",
+    "pallet",
+    "godown",
+    "forklift",
+    "staging",
+    "aisle",
+    "unloading",
+    "inventory",
+    "cold storage"
+  ],
+  "layer_patterns": [
+    ".*(WAREHOUSE|STORAGE|RACK|DOCK|LOADING|DISPATCH|GODOWN).*"
+  ],
+  "element_indicators": [
+    "LOADING_DOCK",
+    "HIGH_BAY",
+    "STEEL_PORTAL",
+    "SLAB"
+  ],
+  "geometry_profile": {
+    "min_rooms": 1,
+    "avg_room_area_min": 200.0,
+    "column_span_min": 12.0,
+    "standard_floor_height": 8.0
+  },
+  "boq_rules": {
+    "default_floor_height": 8.0,
+    "flooring_priority": "VDF_TRIMIX_FLOORING",
+    "wastage_multiplier": 1.05
+  }
+}

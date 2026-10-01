@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>BOQ & Material Takeoff Engine — Krisala Developers</title>
-    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="/static/styles.css?v=3.2" />
   </head>
   <body>
     <div class="app-shell">
@@ -15,9 +15,11 @@
         <nav>
           <a class="nav-link active" data-tab="boq" href="#boq">BOQ Schedule</a>
           <a class="nav-link" data-tab="materials" href="#materials">Material Takeoff</a>
+          <a class="nav-link" data-tab="drawing-viewer" href="#drawing-viewer">Drawing Viewer</a>
           <a class="nav-link" data-tab="elements" href="#elements">Detected Elements & Audit</a>
           <a class="nav-link" data-tab="validation-report" href="#validation-report">CAD Validation Report</a>
           <a class="nav-link" data-tab="rates" href="#rates">Rate Schedule</a>
+          <a class="nav-link" data-tab="timeline-labour" href="#timeline-labour">Timeline & Labour Schedule</a>
           <a class="nav-link" data-tab="validation" href="#validation">Benchmark Validation</a>
         </nav>
         <div class="sidebar-footer">DWG-first estimating workspace<br><span>Krisala Developers</span></div>
@@ -30,7 +32,7 @@
             <h1>Construction BOQ Engine</h1>
             <p class="subtitle">Exact DWG/DXF parsing, constituent material takeoff & auditable BOQ generation.</p>
           </div>
-          <span class="engine-status">● Engine Ready (90%+ Accuracy)</span>
+          <span class="engine-status" id="engine-status-badge">● Engine Ready · Awaiting Drawing</span>
         </header>
 
         <section class="panel upload-panel">
@@ -44,6 +46,133 @@
           </label>
           <button id="generate-btn">Analyze Drawing & Generate BOQ</button>
           <div id="status" class="status">Ready for upload.</div>
+          <div id="processing-steps" class="processing-steps hidden">
+            <div class="step-progress-bar"><div id="step-progress-fill" class="step-progress-fill"></div></div>
+            <div class="steps-grid">
+              <div class="step-item" id="step-1"><span class="step-num">1</span> <span class="step-txt">Reading drawing</span></div>
+              <div class="step-item" id="step-2"><span class="step-num">2</span> <span class="step-txt">Validating CAD</span></div>
+              <div class="step-item" id="step-3"><span class="step-num">3</span> <span class="step-txt">Detecting layers</span></div>
+              <div class="step-item" id="step-4"><span class="step-num">4</span> <span class="step-txt">Detecting elements</span></div>
+              <div class="step-item" id="step-5"><span class="step-num">5</span> <span class="step-txt">Extracting text</span></div>
+              <div class="step-item" id="step-6"><span class="step-num">6</span> <span class="step-txt">Analyzing geometry</span></div>
+              <div class="step-item" id="step-7"><span class="step-num">7</span> <span class="step-txt">Detecting construction type</span></div>
+              <div class="step-item" id="step-8"><span class="step-num">8</span> <span class="step-txt">Generating BOQ</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Safe User-Friendly Error Alert Banner -->
+        <section class="panel error-panel hidden" id="error-panel">
+          <div class="error-banner-content">
+            <span class="error-icon">⚠</span>
+            <div class="error-text">
+              <strong id="error-title">Drawing Processing Failed</strong>
+              <p id="error-msg">Unable to process this DWG file.</p>
+              <small id="error-reason" class="muted"></small>
+            </div>
+            <div class="error-actions">
+              <button type="button" id="btn-error-retry" class="secondary-action">Retry</button>
+              <button type="button" id="btn-error-val" class="secondary-action">View CAD Validation</button>
+              <button type="button" id="btn-error-another" class="secondary-action primary-action">Upload Another Drawing</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Unit Verification Required Alert Banner -->
+        <section class="panel unit-verify-panel hidden" id="unit-verify-panel">
+          <div class="unit-verify-content">
+            <div class="unit-verify-msg">
+              <span class="warning-icon">⚠</span>
+              <div>
+                <strong>Unit Verification Required</strong>
+                <p>Drawing coordinate extents or metadata are ambiguous. Confirm the base CAD unit:</p>
+              </div>
+            </div>
+            <div class="unit-btn-group">
+              <button type="button" class="btn-unit-opt" data-unit="mm">Millimeters [mm]</button>
+              <button type="button" class="btn-unit-opt" data-unit="cm">Centimeters [cm]</button>
+              <button type="button" class="btn-unit-opt" data-unit="m">Meters [m]</button>
+              <button type="button" class="btn-unit-opt" data-unit="in">Inches [in]</button>
+              <button type="button" class="btn-unit-opt" data-unit="ft">Feet [ft]</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Construction Type Detection Card -->
+        <section class="panel construction-type-panel hidden" id="construction-type-panel">
+          <div class="type-card-header">
+            <div class="type-identity">
+              <div class="type-icon-wrapper" id="type-icon">&#x1F3E0;</div>
+              <div>
+                <span class="type-eyebrow">AUTOMATIC CONSTRUCTION TYPE DETECTION</span>
+                <h2 id="type-title">Residential</h2>
+                <p id="type-subtype" class="type-subtype">Apartment Complex</p>
+              </div>
+            </div>
+            <div class="type-meta">
+              <span class="confidence-badge" id="type-badge">HIGH CONFIDENCE</span>
+              <div class="confidence-score-block">
+                <span class="confidence-val" id="type-confidence-val">94%</span>
+                <span class="confidence-lbl">Match Confidence</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="type-evidence-section">
+            <div class="evidence-header">
+              <strong>Verified CAD Evidence & Multi-Signal Audit:</strong>
+              <span class="evidence-count" id="evidence-count-badge">0 signals detected</span>
+            </div>
+            <ul id="type-evidence-list" class="evidence-list"></ul>
+            <div id="mixed-use-breakdown" class="mixed-use-breakdown hidden">
+              <strong>Component Breakdown:</strong>
+              <div id="mixed-use-bars" class="mixed-use-bars"></div>
+            </div>
+          </div>
+
+          <div class="type-action-bar">
+            <div class="type-action-buttons">
+              <button id="accept-type-btn" class="btn-type-accept" type="button">&#x2714; Accept Detection</button>
+              <button id="change-type-btn" class="btn-type-change" type="button">&#x270E; Change Type</button>
+            </div>
+            <span class="source-tag" id="type-source-tag">Source: AI Detection</span>
+          </div>
+
+          <div id="type-override-box" class="type-override-box hidden">
+            <div class="override-inner">
+              <div class="override-field">
+                <label for="override-type-select">Category</label>
+                <select id="override-type-select">
+                  <option value="Residential">Residential</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Office Building">Office Building</option>
+                  <option value="Industrial">Industrial</option>
+                  <option value="Factory">Factory</option>
+                  <option value="Warehouse">Warehouse</option>
+                  <option value="Hospital">Hospital</option>
+                  <option value="Hotel / Resort">Hotel / Resort</option>
+                  <option value="School / College">School / College</option>
+                  <option value="Mall / Shopping Center">Mall / Shopping Center</option>
+                  <option value="Institutional">Institutional</option>
+                  <option value="Infrastructure">Infrastructure</option>
+                  <option value="Mixed Use">Mixed Use</option>
+                  <option value="Other / Unknown">Other / Unknown</option>
+                </select>
+              </div>
+              <div class="override-field">
+                <label for="override-subtype-input">Subtype</label>
+                <input id="override-subtype-input" type="text" placeholder="e.g. Apartment, Retail, ICU Hospital" />
+              </div>
+              <div class="override-field">
+                <label for="override-reason-input">Engineer Notes / Reason</label>
+                <input id="override-reason-input" type="text" placeholder="e.g. Confirmed G+4 residential apartment layout" />
+              </div>
+              <div class="override-actions">
+                <button id="apply-type-override-btn" class="btn-type-apply" type="button">Update & Recalculate BOQ</button>
+                <button id="cancel-type-override-btn" class="btn-type-cancel" type="button">Cancel</button>
+              </div>
+            </div>
+          </div>
         </section>
 
         <section class="panel document-panel hidden" id="document-panel">
@@ -56,6 +185,8 @@
           <div class="kpi"><span>Constituent Materials</span><strong id="material-count">0</strong></div>
           <div class="kpi"><span>Total Material Cost</span><strong id="material-cost">₹0</strong></div>
           <div class="kpi accent"><span>Total Project Cost</span><strong id="grand-total">₹0</strong></div>
+          <div class="kpi highlight-kpi"><span>Est. Construction Time</span><strong id="kpi-duration">?</strong></div>
+          <div class="kpi highlight-kpi"><span>Total Labour Required</span><strong id="kpi-mandays">?</strong></div>
         </section>
 
         <div class="action-row">
@@ -75,9 +206,11 @@
         <div class="tabs">
           <a class="tab-btn active" data-tab="boq" href="#boq">BOQ SCHEDULE</a>
           <a class="tab-btn" data-tab="materials" href="#materials">MATERIAL TAKEOFF (MTO)</a>
+          <a class="tab-btn" data-tab="drawing-viewer" href="#drawing-viewer">DRAWING VIEWER</a>
           <a class="tab-btn" data-tab="elements" href="#elements">DETECTED ELEMENTS (MULTI-SIGNAL)</a>
           <a class="tab-btn" data-tab="validation-report" href="#validation-report">CAD VALIDATION REPORT</a>
           <a class="tab-btn" data-tab="rates" href="#rates">RATE ANALYSIS</a>
+          <a class="tab-btn" data-tab="timeline-labour" href="#timeline-labour">CONSTRUCTION TIMELINE & LABOUR</a>
           <a class="tab-btn" data-tab="validation" href="#validation">BENCHMARK VALIDATION</a>
         </div>
 
@@ -90,6 +223,44 @@
             </div>
             <span class="muted">Drawing Qty · Gross Qty · Opening Deductions · Net Qty · Wastage · Rate · Amount</span>
           </div>
+          <!-- Construction Duration & Labour Workforce Summary Card -->
+          <div class="boq-labour-summary-card" id="boq-labour-summary-card">
+            <div class="bls-header">
+              <div class="bls-title-group">
+                <span class="bls-badge">PROJECT EXECUTION & LABOUR SCHEDULE</span>
+                <h3>Estimated Construction Time: <span id="bls-duration">?</span></h3>
+              </div>
+              <button type="button" class="btn-goto-timeline" id="btn-goto-timeline">&#x23F1; View Required Activities & Milestone Schedule &rarr;</button>
+            </div>
+            <div class="bls-grid">
+              <div class="bls-item">
+                <span class="bls-lbl">Construction Type</span>
+                <strong id="bls-type">Residential</strong>
+                <small id="bls-subtype">Apartment Complex</small>
+              </div>
+              <div class="bls-item">
+                <span class="bls-lbl">Working Schedule</span>
+                <strong id="bls-working-days">? Net Days</strong>
+                <small id="bls-calendar-days">? Calendar Days</small>
+              </div>
+              <div class="bls-item">
+                <span class="bls-lbl">Target Handover</span>
+                <strong id="bls-handover">?</strong>
+                <small>6-day work week basis</small>
+              </div>
+              <div class="bls-item">
+                <span class="bls-lbl">Labour Required</span>
+                <strong id="bls-mandays">? Man-days</strong>
+                <small id="bls-crew">Daily: ? | Peak: ?</small>
+              </div>
+              <div class="bls-item">
+                <span class="bls-lbl">Required Activities</span>
+                <strong id="bls-activities-count">7 CPM Phases</strong>
+                <small>Full Activity Plan</small>
+              </div>
+            </div>
+          </div>
+
           <div class="table-wrap">
             <table>
               <thead>
@@ -106,7 +277,7 @@
                   <th>Final Qty</th>
                   <th>Rate</th>
                   <th>Amount</th>
-                  <th>Audit</th>
+                  <th style="min-width: 260px;">Material Placement & Actions</th>
                 </tr>
               </thead>
               <tbody id="boq-body"></tbody>
@@ -128,22 +299,305 @@
               <thead>
                 <tr>
                   <th>Sr.</th>
-                  <th>Material Code</th>
                   <th>Constituent Material</th>
                   <th>Category</th>
-                  <th>Derived From</th>
-                  <th>Takeoff Qty</th>
-                  <th>Factor</th>
-                  <th>Wastage</th>
-                  <th>Required Qty</th>
-                  <th>Packaging Unit</th>
-                  <th>Material Rate</th>
-                  <th>Total Cost</th>
-                  <th>Status</th>
+                  <th>Net Qty</th>
+                  <th>Allowance</th>
+                  <th>Est. Requirement</th>
+                  <th>Available Stock</th>
+                  <th>Consumed</th>
+                  <th>Remaining Req.</th>
+                  <th>Procurement Gap</th>
+                  <th>Unit</th>
+                  <th>Source</th>
+                  <th>Confidence</th>
+                  <th>CAD Drawing</th>
                 </tr>
               </thead>
               <tbody id="materials-body"></tbody>
             </table>
+          </div>
+        </section>
+
+        <!-- Panel 2.5: Interactive CAD Drawing Viewer -->
+        <section class="panel results-panel tab-panel hidden" id="drawing-viewer-panel">
+          <div class="viewer-topbar">
+            <div class="viewer-controls-group">
+              <label class="viewer-control-label" for="viewer-drawing-select">Drawing:</label>
+              <select id="viewer-drawing-select" class="viewer-select"></select>
+
+              <label class="viewer-control-label" for="viewer-rev-select">Revision:</label>
+              <select id="viewer-rev-select" class="viewer-select">
+                <option value="REV-01">REV-01</option>
+                <option value="REV-02">REV-02</option>
+              </select>
+              <button type="button" id="btn-compare-rev" class="viewer-btn" title="Compare Revisions (Added in Green, Removed in Red, Modified in Yellow)">⚡ Compare Revision</button>
+
+              <label class="viewer-control-label" for="viewer-floor-select">Floor:</label>
+              <select id="viewer-floor-select" class="viewer-select">
+                <option value="ALL">All Floors</option>
+              </select>
+            </div>
+
+            <div class="viewer-search-group">
+              <input type="text" id="viewer-search-input" placeholder="🔍 Search Element ID (e.g. WAL_0001), BOQ Item, Material, Layer..." />
+              <button type="button" id="btn-viewer-search-clear" class="btn-ghost" title="Clear Search">✕</button>
+            </div>
+
+            <div class="viewer-measure-group">
+              <span class="viewer-control-label">Measure:</span>
+              <button type="button" id="btn-measure-dist" class="viewer-btn" title="Measure Distance between points">📏 Distance</button>
+              <button type="button" id="btn-measure-area" class="viewer-btn" title="Measure Area by polygon points">📐 Area</button>
+              <button type="button" id="btn-measure-poly" class="viewer-btn" title="Measure Continuous Polyline">〰 Polyline</button>
+              <button type="button" id="btn-measure-clear" class="viewer-btn btn-ghost" title="Clear Active Measurement">✕ Clear</button>
+            </div>
+
+            <div class="viewer-tools-group">
+              <button type="button" id="btn-toggle-simulator" class="viewer-btn" title="Toggle Material Placement Simulator" style="background:#f4bd43;color:#211b10;font-weight:700;">🎨 Material Simulator</button>
+              <button type="button" id="btn-viewer-layers" class="viewer-btn" title="Toggle Layer Visibility">☰ Layers (<span id="viewer-layer-count">0</span>)</button>
+              <button type="button" id="btn-zoom-in" class="viewer-tool-btn" title="Zoom In">+</button>
+              <button type="button" id="btn-zoom-out" class="viewer-tool-btn" title="Zoom Out">−</button>
+              <button type="button" id="btn-zoom-fit" class="viewer-tool-btn" title="Fit Drawing to Canvas">⛶ Fit</button>
+              <button type="button" id="btn-reset-view" class="viewer-tool-btn" title="Reset Pan & Zoom">↺</button>
+              <button type="button" id="btn-fullscreen" class="viewer-tool-btn" title="Toggle Fullscreen">⤢</button>
+            </div>
+          </div>
+
+          <!-- Main Canvas Workspace and Details Split Layout -->
+          <div class="viewer-workspace" id="viewer-workspace">
+            <div class="canvas-viewport" id="canvas-viewport">
+              <canvas id="cad-canvas"></canvas>
+
+              <!-- Placement Simulator Mode HUD Bar -->
+              <div class="canvas-mode-hud hidden" id="canvas-mode-hud">
+                <span class="hud-title">MODE:</span>
+                <button type="button" class="hud-mode-btn active" data-mode="2d" id="hud-btn-2d">2D Placement</button>
+                <button type="button" class="hud-mode-btn" data-mode="3d" id="hud-btn-3d">3D Placement</button>
+                <button type="button" class="hud-mode-btn" data-mode="boq" id="hud-btn-boq">BOQ Source</button>
+                <button type="button" class="hud-mode-btn" data-mode="calc" id="hud-btn-calc">Calculation</button>
+              </div>
+
+              <!-- Scale & Coordinate Overlay -->
+              <div class="canvas-overlay-scale" id="canvas-scale-bar">
+                <span id="canvas-scale-text">Scale: 1m</span>
+                <div class="scale-ruler"></div>
+              </div>
+
+              <!-- Measurement Result Banner -->
+              <div id="measure-result-banner" class="measure-result-banner hidden">
+                <span id="measure-result-text">Distance: 0.00 m</span>
+              </div>
+
+              <!-- Revision Comparison Legend -->
+              <div id="rev-legend" class="rev-legend hidden">
+                <div class="legend-item"><span class="legend-box added"></span> Added (+<span id="rev-added-count">0</span>)</div>
+                <div class="legend-item"><span class="legend-box removed"></span> Removed (-<span id="rev-removed-count">0</span>)</div>
+                <div class="legend-item"><span class="legend-box modified"></span> Modified (<span id="rev-modified-count">0</span>)</div>
+                <div class="legend-item"><span class="legend-box unchanged"></span> Unchanged</div>
+                <button type="button" id="btn-exit-rev-compare" class="btn-ghost" style="margin-left:8px;font-size:10px;">Exit Compare</button>
+              </div>
+
+              <!-- Floating Layers Panel Drawer -->
+              <div id="viewer-layer-drawer" class="viewer-layer-drawer hidden">
+                <div class="drawer-header">
+                  <strong>CAD Drawing Layers</strong>
+                  <button type="button" id="btn-close-layers" class="btn-ghost">✕</button>
+                </div>
+                <div class="drawer-actions">
+                  <button type="button" id="btn-layers-show-all" class="btn-xs">Show All</button>
+                  <button type="button" id="btn-layers-hide-all" class="btn-xs">Hide All</button>
+                  <button type="button" id="btn-layers-isolate" class="btn-xs">Isolate Selected</button>
+                </div>
+                <div id="viewer-layers-list" class="layers-list"></div>
+              </div>
+
+              <!-- Hover Tooltip -->
+              <div id="viewer-tooltip" class="viewer-tooltip hidden"></div>
+            </div>
+
+            <!-- Right-Side Element Details & Traceability Panel -->
+            <aside class="viewer-element-panel" id="viewer-element-panel">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-eyebrow">ELEMENT DETAILS</span>
+                  <h3 id="vp-elem-id">Select an element</h3>
+                </div>
+                <span class="badge-pill info" id="vp-elem-status">READY</span>
+              </div>
+
+              <div class="panel-content" id="vp-content-body">
+                <div class="placeholder-msg" id="vp-placeholder">
+                  Click any CAD line, wall, column, door, or window on the drawing, or click <strong>[View on Drawing]</strong> in the BOQ Schedule.
+                </div>
+
+                <div id="vp-details-wrap" class="hidden">
+                  <table class="element-attr-table">
+                    <tbody>
+                      <tr><th>Type</th><td id="vp-type">—</td></tr>
+                      <tr><th>Layer</th><td id="vp-layer">—</td></tr>
+                      <tr><th>Floor</th><td id="vp-floor">—</td></tr>
+                      <tr><th>Length</th><td id="vp-length">—</td></tr>
+                      <tr><th>Height</th><td id="vp-height">—</td></tr>
+                      <tr><th>Thickness</th><td id="vp-thickness">—</td></tr>
+                      <tr><th>Gross Volume</th><td id="vp-gross-vol">—</td></tr>
+                      <tr><th>Opening Deduction</th><td id="vp-opening-ded">—</td></tr>
+                      <tr><th>Net Quantity</th><td id="vp-net-qty">—</td></tr>
+                      <tr><th>BOQ Item</th><td id="vp-boq-item">—</td></tr>
+                      <tr><th>Material</th><td id="vp-material">—</td></tr>
+                      <tr><th>Confidence</th><td id="vp-confidence">—</td></tr>
+                      <tr><th>Status</th><td id="vp-status">—</td></tr>
+                    </tbody>
+                  </table>
+
+                  <div class="element-action-buttons">
+                    <button type="button" id="btn-vp-visualize-placement" class="vp-btn" style="background:#f4bd43;color:#211b10;font-weight:700;grid-column: span 2;">🎨 Visualize Placement</button>
+                    <button type="button" id="btn-vp-view-boq" class="vp-btn primary">View in BOQ</button>
+                    <button type="button" id="btn-vp-view-calc" class="vp-btn">View Calculation</button>
+                    <button type="button" id="btn-vp-view-source" class="vp-btn">View Source</button>
+                    <button type="button" id="btn-vp-review" class="vp-btn success">✓ Review & Approve</button>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Material Placement Simulator Panel -->
+            <aside class="viewer-simulator-panel hidden" id="viewer-simulator-panel">
+              <div class="panel-header">
+                <div>
+                  <span class="panel-eyebrow">CAD PLACEMENT SIMULATOR</span>
+                  <h3 id="sim-panel-title">MATERIAL PLACEMENT SIMULATOR</h3>
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <span class="badge-pill success" id="sim-status-badge">ACTIVE</span>
+                  <button type="button" id="btn-close-simulator" class="btn-ghost" title="Close Simulator" style="font-size:14px;color:#8b949e;cursor:pointer;">✕</button>
+                </div>
+              </div>
+
+              <div class="panel-content" id="sim-content-body">
+                <!-- Target Information -->
+                <div class="sim-card sim-target-card">
+                  <div class="sim-row">
+                    <span class="sim-label">Material:</span>
+                    <strong id="sim-mat-name" style="color:#f4bd43;">Floor Tiles</strong>
+                  </div>
+                  <div class="sim-row">
+                    <span class="sim-label">Category:</span>
+                    <span id="sim-mat-category" style="color:#94a3b8;">Flooring & Finishes</span>
+                  </div>
+                  <div class="sim-row">
+                    <span class="sim-label">Target Floor:</span>
+                    <span id="sim-floor-name">Floor 03</span>
+                  </div>
+                  <div class="sim-row">
+                    <span class="sim-label">Source Drawing:</span>
+                    <span id="sim-source-dwg" class="code-handle">Tower_A_Rev01.dwg</span>
+                  </div>
+                  <div class="sim-row">
+                    <span class="sim-label">BOQ Item Ref:</span>
+                    <span id="sim-boq-ref" style="font-family:monospace;color:#f4bd43;">BOQ-042</span>
+                  </div>
+                  <div class="sim-row">
+                    <span class="sim-label">Source Elements:</span>
+                    <span id="sim-source-elements-txt" style="font-size:9px;color:#8b949e;word-break:break-all;">FLOOR-03, ROOM-301</span>
+                  </div>
+                </div>
+
+                <!-- Parameters Controls -->
+                <div class="sim-card">
+                  <div class="sim-card-header">
+                    <strong>Material Parameters</strong>
+                    <span class="sim-card-sub" id="sim-param-sub">Live Recalculation</span>
+                  </div>
+                  <div id="sim-dynamic-params-container" class="sim-params-container">
+                    <!-- Injected dynamically based on category -->
+                  </div>
+                  <button type="button" id="btn-recalculate-sim" class="btn-xs primary" style="width:100%;margin-top:8px;padding:6px;">⚡ Recalculate Placement</button>
+                </div>
+
+                <!-- Calculated Metrics Breakdown (As specified in prompt) -->
+                <div class="sim-card sim-metrics-card">
+                  <div class="sim-card-header">
+                    <strong>Placement Quantity Breakdown</strong>
+                  </div>
+                  <div class="sim-metrics-grid">
+                    <div class="sim-metric-box">
+                      <span class="metric-lbl" id="sim-lbl-usable">Area / Scope:</span>
+                      <strong class="metric-val" id="sim-val-usable">2,450 m²</strong>
+                    </div>
+                    <div class="sim-metric-box">
+                      <span class="metric-lbl" id="sim-lbl-full">Full Tiles:</span>
+                      <strong class="metric-val" id="sim-val-full">—</strong>
+                    </div>
+                    <div class="sim-metric-box">
+                      <span class="metric-lbl" id="sim-lbl-cut">Cut Tiles:</span>
+                      <strong class="metric-val" id="sim-val-cut">—</strong>
+                    </div>
+                    <div class="sim-metric-box">
+                      <span class="metric-lbl">Wastage:</span>
+                      <strong class="metric-val" id="sim-val-waste">7.0%</strong>
+                    </div>
+                    <div class="sim-metric-box highlight" style="grid-column: span 2;">
+                      <span class="metric-lbl">Total Procurement Quantity:</span>
+                      <strong class="metric-val" id="sim-val-procurement">2,621.50 m²</strong>
+                    </div>
+                  </div>
+
+                  <!-- Confidence & Validation -->
+                  <div class="sim-confidence-block" style="margin-top:10px;">
+                    <div class="conf-header" style="display:flex;justify-content:space-between;align-items:center;">
+                      <span style="font-size:10px;color:#8b949e;">Placement Confidence:</span>
+                      <strong id="sim-confidence-val" style="font-size:13px;color:#22c55e;">96%</strong>
+                    </div>
+                    <div style="margin-top:4px;">
+                      <span id="sim-confidence-badge" class="badge-pill success">Verified CAD Geometry</span>
+                    </div>
+                    <small id="sim-confidence-reason" style="display:block;margin-top:5px;font-size:9px;color:#8b949e;line-height:1.4;">
+                      Deterministic placement derived from closed CAD floor boundaries.
+                    </small>
+                  </div>
+
+                  <!-- Insufficient Information / Safety Alert -->
+                  <div id="sim-safety-alert" class="sim-safety-alert hidden" style="margin-top:10px;padding:8px 10px;border-radius:6px;background:#3b1219;border:1px solid #f85149;color:#ff7b72;font-size:10px;">
+                    <strong id="sim-safety-title" style="display:block;margin-bottom:3px;">⚠ Safety Alert</strong>
+                    <span id="sim-safety-text"></span>
+                  </div>
+                </div>
+
+                <!-- Placement Modes Buttons: [2D] [3D] [BOQ] [CALCULATION] -->
+                <div class="sim-mode-switcher-row">
+                  <span style="font-size:9px;color:#8b949e;text-transform:uppercase;margin-bottom:4px;display:block;">Placement Mode:</span>
+                  <div class="sim-mode-btn-group">
+                    <button type="button" class="sim-mode-btn active" data-mode="2d" id="btn-sim-mode-2d">[2D Placement]</button>
+                    <button type="button" class="sim-mode-btn" data-mode="3d" id="btn-sim-mode-3d">[3D Placement]</button>
+                    <button type="button" class="sim-mode-btn" data-mode="boq" id="btn-sim-mode-boq">[BOQ Source]</button>
+                    <button type="button" class="sim-mode-btn" data-mode="calc" id="btn-sim-mode-calc">[Calculation]</button>
+                  </div>
+                </div>
+
+                <!-- Simulator Bottom Action Buttons: [Export Placement] [View BOQ] [View Source] [Review] -->
+                <div class="element-action-buttons" style="margin-top:12px;">
+                  <button type="button" id="btn-sim-export" class="vp-btn">Export Placement</button>
+                  <button type="button" id="btn-sim-view-boq" class="vp-btn">View BOQ</button>
+                  <button type="button" id="btn-sim-view-source" class="vp-btn">View Source</button>
+                  <button type="button" id="btn-sim-review" class="vp-btn success">✓ Review & Apply</button>
+                </div>
+              </div>
+            </aside>
+          </div>
+
+          <!-- Bottom Status & Contributing Elements Bar -->
+          <div class="viewer-bottom-bar">
+            <div class="viewer-coords" id="viewer-coords">X: 0.00 m | Y: 0.00 m</div>
+
+            <!-- Contributing Elements Info Bar (BOQ -> Drawing Link) -->
+            <div id="contributing-bar" class="contributing-bar hidden">
+              <div class="contributing-info">
+                <strong id="contributing-title">Contributing Elements:</strong>
+                <span id="contributing-count" class="count-tag">0 elements</span>
+              </div>
+              <div id="contributing-chips" class="contributing-chips"></div>
+              <button type="button" id="btn-clear-contributing" class="btn-ghost" title="Clear selection">Clear</button>
+            </div>
           </div>
         </section>
 
@@ -242,6 +696,39 @@
             <button id="validate-btn" class="secondary-action">Validate Quantities</button>
           </div>
           <div id="validation-status" class="status">Upload a manually prepared Excel BOQ for verification.</div>
+
+          <!-- Category Benchmark Coverage & Error Table -->
+          <div class="section-heading" style="margin-top:14px;">
+            <div>
+              <p class="eyebrow">Trade Benchmarks</p>
+              <h3 style="margin:0;font-size:13px;">Major Work Category Benchmark Validation</h3>
+            </div>
+          </div>
+          <div class="table-wrap benchmark-summary-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Work Category</th>
+                  <th>Reference Qty</th>
+                  <th>Engine Qty</th>
+                  <th>Absolute Error</th>
+                  <th>Percentage Error</th>
+                  <th>Bias</th>
+                  <th>Coverage Status</th>
+                </tr>
+              </thead>
+              <tbody id="benchmark-category-body">
+                <tr><td colspan="7" class="muted text-center">Run validation with reference Excel to view category benchmarks.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="section-heading" style="margin-top:14px;">
+            <div>
+              <p class="eyebrow">Line Items</p>
+              <h3 style="margin:0;font-size:13px;">Item-by-Item Tolerance Check (1%)</h3>
+            </div>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -259,6 +746,92 @@
             </table>
           </div>
         </section>
+
+        <!-- Panel 7: Construction Timeline & Labour Workforce Takeoff -->
+        <section class="panel results-panel tab-panel hidden" id="timeline-labour-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Project Execution Plan</p>
+              <h2>Construction Duration & Labour Workforce Takeoff</h2>
+            </div>
+            <span class="muted">CPWD / IS:7272 Standards ? Critical Path Method (CPM) Phase Sequence</span>
+          </div>
+
+          <!-- Timeline Metrics Overview Banner -->
+          <div class="timeline-overview-banner">
+            <div class="timeline-metric-card">
+              <span class="metric-lbl">Total Estimated Duration</span>
+              <strong class="metric-val" id="tl-duration-months">?</strong>
+              <small id="tl-duration-days">Net Working Days: ?</small>
+            </div>
+            <div class="timeline-metric-card">
+              <span class="metric-lbl">Target Handover Date</span>
+              <strong class="metric-val" id="tl-target-date">?</strong>
+              <small id="tl-cal-days">Calendar Days: ?</small>
+            </div>
+            <div class="timeline-metric-card">
+              <span class="metric-lbl">Total Labour Required</span>
+              <strong class="metric-val" id="tl-total-mandays">?</strong>
+              <small id="tl-shift-basis">Standard 8h Shift / IS:7272</small>
+            </div>
+            <div class="timeline-metric-card">
+              <span class="metric-lbl">Recommended Daily Workforce</span>
+              <strong class="metric-val" id="tl-daily-crew">?</strong>
+              <small id="tl-peak-crew">Peak Workforce: ? workers</small>
+            </div>
+          </div>
+
+          <!-- Phase-wise Milestone Timeline (Gantt Schedule) -->
+          <div class="schedule-section">
+            <div class="sub-heading-row">
+              <h3>1. Phase-wise Construction Schedule & Critical Path Milestones</h3>
+              <span class="badge-pill">CPM Overlapping Tasks (6-day work week)</span>
+            </div>
+            <div class="table-wrap">
+              <table class="schedule-table">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Phase</th>
+                    <th>Construction Stage & Scope</th>
+                    <th>Required Construction Activities</th>
+                    <th>Timeline Window</th>
+                    <th>Duration</th>
+                    <th>Daily Crew</th>
+                    <th>Phase Completion Milestone</th>
+                  </tr>
+                </thead>
+                <tbody id="timeline-phases-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Trade-wise Workforce Takeoff -->
+          <div class="workforce-section">
+            <div class="sub-heading-row">
+              <h3>2. Trade-wise Labour Workforce Takeoff (CPWD DSR Productivity)</h3>
+              <span class="badge-pill">IS:7272 Labour Output Coefficients</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 45px;">Sr.</th>
+                    <th>Trade / Skill Category</th>
+                    <th>Required Workforce (Man-days)</th>
+                    <th>Required Construction Activities & Scope</th>
+                    <th style="width: 140px;">Workforce Share</th>
+                  </tr>
+                </thead>
+                <tbody id="timeline-trades-body"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="audit-note-box" id="timeline-audit-note">
+            <strong>Engineering Audit Basis:</strong> Calculated deterministically from drawing bill of quantities using CPWD DSR output standards and IS:7272 recommendations.
+          </div>
+        </section>
+
       </main>
     </div>
 
@@ -303,6 +876,32 @@
       </div>
     </div>
 
-    <script src="/static/app.js"></script>
+    <!-- Calculation Modal -->
+    <div id="calc-modal" class="modal-backdrop hidden">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 id="calc-modal-title">Deterministic Calculation Breakdown</h3>
+          <button id="calc-modal-close" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="calc-modal-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Element Source Modal -->
+    <div id="source-modal" class="modal-backdrop hidden">
+      <div class="modal-window">
+        <div class="modal-header">
+          <h3 id="source-modal-title">CAD Source Entity Traceability</h3>
+          <button id="source-modal-close" class="modal-close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="source-modal-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <script defer src="/static/app.js?v=3.3"></script>
   </body>
 </html>

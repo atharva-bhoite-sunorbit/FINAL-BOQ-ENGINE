@@ -55,6 +55,7 @@ class BOQItem:
             "source_entities": self.source_entities,
             "source_layers": self.source_layers,
             "source_element_ids": self.source_element_ids,
+            "source_elements": self.source_element_ids,
             "status": self.status,
             "confidence": round(self.confidence, 2),
             "remarks": self.remarks,

@@ -1,0 +1,53 @@
+{
+  "name": "School / College",
+  "icon": "\ud83c\udfeb",
+  "subtypes": [
+    "Primary / Secondary School",
+    "High School Campus",
+    "College / University Block",
+    "Training Institute"
+  ],
+  "default_subtype": "High School Campus",
+  "keywords": [
+    "classroom",
+    "class room",
+    "laboratory",
+    "lab",
+    "principal",
+    "staff room",
+    "library",
+    "auditorium",
+    "playground",
+    "school",
+    "college",
+    "campus",
+    "physics lab",
+    "chemistry lab",
+    "computer lab",
+    "corridor",
+    "blackboard",
+    "sports room"
+  ],
+  "layer_patterns": [
+    ".*(SCHOOL|COLLEGE|CLASS|LAB|LIBRARY|AUDITORIUM|PLAYGROUND|CAMPUS).*"
+  ],
+  "element_indicators": [
+    "CLASSROOM_WALL",
+    "DOOR",
+    "WINDOW",
+    "CORRIDOR"
+  ],
+  "geometry_profile": {
+    "min_rooms": 4,
+    "avg_room_area_min": 40.0,
+    "avg_room_area_max": 100.0,
+    "column_span_min": 6.0,
+    "standard_floor_height": 3.6
+  },
+  "boq_rules": {
+    "default_floor_height": 3.6,
+    "paint_priority": "WASHABLE_ACRYLIC",
+    "flooring_priority": "KOTA_STONE_OR_TILE",
+    "wastage_multiplier": 1.04
+  }
+}

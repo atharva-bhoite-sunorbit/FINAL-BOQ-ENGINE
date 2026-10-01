@@ -67,7 +67,7 @@ class BOQItemBuilder:
             calculation_basis=material.calculation_basis,
             source_entities=source_entities,
             source_layers=source_layers,
-            source_element_ids=[material.source_element_id] if material.source_element_id else [],
+            source_element_ids=[s.strip() for s in (material.source_element_id or "").split(",") if s.strip()] or ([element.element_id] if element else []),
             status=material.status,
             confidence=material.confidence,
             remarks=material.remarks,

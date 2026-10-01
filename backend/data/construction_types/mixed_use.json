@@ -1,0 +1,33 @@
+{
+  "name": "Mixed Use",
+  "icon": "\ud83c\udfd9\ufe0f",
+  "subtypes": [
+    "Residential + Commercial Retail",
+    "Commercial + Office Complex",
+    "Industrial + Office Facility"
+  ],
+  "default_subtype": "Residential + Commercial Retail",
+  "keywords": [
+    "mixed use",
+    "podium",
+    "retail with residential",
+    "commercial residential",
+    "shopping and apartments"
+  ],
+  "layer_patterns": [
+    ".*(MIXED|PODIUM).*"
+  ],
+  "element_indicators": [
+    "WALL",
+    "COLUMN",
+    "RETAIL_PARTITION"
+  ],
+  "geometry_profile": {
+    "min_rooms": 5,
+    "standard_floor_height": 3.2
+  },
+  "boq_rules": {
+    "default_floor_height": 3.2,
+    "wastage_multiplier": 1.05
+  }
+}

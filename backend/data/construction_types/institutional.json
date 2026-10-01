@@ -1,0 +1,43 @@
+{
+  "name": "Institutional",
+  "icon": "\ud83c\udfdb\ufe0f",
+  "subtypes": [
+    "Government Administrative Office",
+    "Research Institute",
+    "Civic Center",
+    "Court / Legal Complex"
+  ],
+  "default_subtype": "Government Administrative Office",
+  "keywords": [
+    "institutional",
+    "ministry",
+    "department",
+    "hearing room",
+    "court",
+    "archive",
+    "record room",
+    "public counter",
+    "hearing hall",
+    "council chamber",
+    "secretariat",
+    "auditorium"
+  ],
+  "layer_patterns": [
+    ".*(INSTITUTION|GOVT|CIVIC|COURT|COUNCIL|ADMIN).*"
+  ],
+  "element_indicators": [
+    "WALL",
+    "COLUMN",
+    "HEAVY_DOOR"
+  ],
+  "geometry_profile": {
+    "min_rooms": 3,
+    "avg_room_area_min": 25.0,
+    "column_span_min": 6.0,
+    "standard_floor_height": 3.6
+  },
+  "boq_rules": {
+    "default_floor_height": 3.6,
+    "wastage_multiplier": 1.05
+  }
+}

@@ -18,12 +18,39 @@ def blocks(cad_data: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def signal(entity: dict[str, Any]) -> str:
-    attributes = " ".join(str(item.get("text", "")) for item in entity.get("attributes", []))
+    cached = entity.get("_signal")
+    if cached is not None:
+        return cached
+
+    raw_attribs = entity.get("attributes")
+    attr_parts: list[str] = []
+    if isinstance(raw_attribs, dict):
+        for k, v in raw_attribs.items():
+            attr_parts.append(str(k))
+            if isinstance(v, dict):
+                attr_parts.append(str(v.get("text", v.get("value", ""))))
+            elif v is not None:
+                attr_parts.append(str(v))
+    elif isinstance(raw_attribs, (list, tuple, set)):
+        for item in raw_attribs:
+            if isinstance(item, dict):
+                attr_parts.append(str(item.get("text", item.get("value", ""))))
+            elif item is not None:
+                attr_parts.append(str(item))
+    elif raw_attribs is not None:
+        attr_parts.append(str(raw_attribs))
+    attributes = " ".join(attr_parts)
+
     layer = str(entity.get("layer", ""))
+    # Also include cleaned layer name without common export/domain prefixes
+    clean_layer = re.sub(r"^[^a-zA-Z0-9_]+|^(?:DWGSHARE\.COM_|XREF\$|PROJ\$)", "", layer, flags=re.IGNORECASE)
+
     block_name = str(entity.get("block_name", ""))
     text = str(entity.get("text", ""))
     entity_type = str(entity.get("entity_type", ""))
-    return f"{layer} {block_name} {text} {entity_type} {attributes}".upper()
+    sig = f"{layer} {clean_layer} {block_name} {text} {entity_type} {attributes}".upper()
+    entity["_signal"] = sig
+    return sig
 
 
 def matches(entity: dict[str, Any], tokens: Iterable[str]) -> bool:

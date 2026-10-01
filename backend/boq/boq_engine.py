@@ -45,9 +45,11 @@ class BOQEngine:
         self,
         drawing_data: dict[str, Any],
         rate_overrides: Optional[dict[str, Any]] = None,
+        construction_type: Optional[str] = None,
+        construction_subtype: Optional[str] = None,
     ) -> dict[str, Any]:
         """
-        Executes the full deterministic CAD-to-BOQ pipeline.
+        Executes the full deterministic CAD-to-BOQ pipeline with construction type awareness.
         """
         filename = drawing_data.get("filename", "drawing.dxf")
         units = drawing_data.get("units", "m")
@@ -56,8 +58,28 @@ class BOQEngine:
         entity_count = len(raw_entities)
         views = drawing_data.get("drawing_views", [])
 
+        c_type = construction_type or drawing_data.get("construction_type")
+        c_sub = construction_subtype or drawing_data.get("construction_subtype")
+
+        # Load construction type rules if present
+        type_rules = {}
+        if c_type:
+            try:
+                from backend.construction_type_engine import ConstructionTypeEngine
+                cte = ConstructionTypeEngine(self.data_dir / "construction_types")
+                type_rules = cte.get_type_rules(c_type)
+            except Exception as e:
+                logger.debug(f"Could not load type rules: {e}")
+
         # 1. Geometry Detection
         elements: list[ConstructionElement] = self.geometry_engine.detect_all(drawing_data)
+
+        # Apply type-specific floor height default if wall height is unassigned
+        std_h = type_rules.get("default_floor_height")
+        if std_h:
+            for el in elements:
+                if el.element_type in {"WALL", "COLUMN"} and el.geometry.get("height") in {None, 0, 3.0}:
+                    el.geometry["height"] = float(std_h)
 
         # 2. Extract Openings for Deduction from Walls
         openings = []
@@ -75,19 +97,25 @@ class BOQEngine:
                 })
 
         # 3. Apply Wall Deductions
-        for el in elements:
-            if el.element_type in {"WALL", "PARTITION"}:
-                geo = el.geometry
-                thickness = float(geo.get("thickness", 0.15) or 0.15)
-                gross_vol = float(geo.get("volume", 0.0))
-                gross_surf = float(geo.get("area", 0.0))
+        wall_elements = [el for el in elements if el.element_type in {"WALL", "PARTITION"}]
+        total_wall_surf = sum(float(el.geometry.get("area", 0.0) or 0.0) for el in wall_elements)
+        total_opening_area = sum(float(op.get("area", 0.0) or 0.0) for op in openings)
+        global_opening_ratio = 0.0
+        if total_wall_surf > 0 and total_opening_area > 0:
+            global_opening_ratio = min(0.35, total_opening_area / total_wall_surf)
 
-                if openings and gross_vol > 0:
-                    # Apply opening deductions
+        for el in wall_elements:
+            geo = el.geometry
+            thickness = float(geo.get("thickness", 0.15) or 0.15)
+            gross_vol = float(geo.get("volume", 0.0) or 0.0)
+            gross_surf = float(geo.get("area", 0.0) or 0.0)
+
+            if openings and gross_vol > 0:
+                if len(wall_elements) <= 3 and len(openings) <= 10:
                     ded_res = self.deduction_engine.apply_deductions_to_wall(
                         gross_volume_m3=gross_vol,
                         gross_surface_area_m2=gross_surf,
-                        openings=openings[:len(openings)],  # associated openings
+                        openings=openings,
                         wall_thickness_m=thickness,
                     )
                     geo["deduction_volume"] = ded_res["deduction_volume_m3"]
@@ -95,6 +123,16 @@ class BOQEngine:
                     geo["net_volume"] = ded_res["net_volume_m3"]
                     geo["net_area"] = ded_res["net_surface_area_m2"]
                     geo["volume"] = ded_res["net_volume_m3"]
+                else:
+                    ded_surf = round(gross_surf * global_opening_ratio, 4)
+                    ded_vol = round(gross_vol * global_opening_ratio, 4)
+                    net_surf = round(max(0.0, gross_surf - ded_surf), 4)
+                    net_vol = round(max(0.0, gross_vol - ded_vol), 4)
+                    geo["deduction_volume"] = ded_vol
+                    geo["deduction_area"] = ded_surf
+                    geo["net_volume"] = net_vol
+                    geo["net_area"] = net_surf
+                    geo["volume"] = net_vol
 
         # 4. Material Systems Mapping
         combined_rates = dict(self.rates_db)
@@ -146,4 +184,6 @@ class BOQEngine:
             layer_count=layer_count,
             boq_items=reordered_items,
             validation_result=validation_result,
+            construction_type=c_type,
+            construction_subtype=c_sub,
         )

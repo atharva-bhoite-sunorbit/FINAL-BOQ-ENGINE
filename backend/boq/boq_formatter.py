@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Optional
 from backend.models.boq_item import BOQItem
 
 
@@ -14,9 +14,12 @@ def format_final_boq_response(
     reasoning_steps: list[str] | None = None,
     assumptions: list[str] | None = None,
     export_format: str = "Excel",
+    construction_type: Optional[str] = None,
+    construction_subtype: Optional[str] = None,
 ) -> dict[str, Any]:
     """
-    Formats the final BOQ API response strictly adhering to Section 43 of the specification.
+    Formats the final BOQ API response strictly adhering to Section 43 of the specification,
+    enriched with detected or verified construction type.
     """
     serialized_boq = []
     for item in boq_items:
@@ -30,7 +33,7 @@ def format_final_boq_response(
             "gross_quantity": round(item.gross_quantity, 4),
             "deduction_quantity": round(item.deduction_quantity, 4),
             "net_quantity": round(item.net_quantity, 4),
-            "quantity": round(item.total_quantity, 4),  # Standard billable quantity
+            "quantity": round(item.total_quantity, 4),
             "wastage_percent": item.wastage_percent,
             "wastage_quantity": round(item.wastage_quantity, 4),
             "total_quantity": round(item.total_quantity, 4),
@@ -42,12 +45,12 @@ def format_final_boq_response(
             "remarks": item.remarks,
             "source_entities": item.source_entities,
             "source_layers": item.source_layers,
+            "source_elements": item.source_element_ids,
+            "source_element_ids": item.source_element_ids,
         })
 
-    # Collect unique warnings
     warnings_list = [w["message"] if isinstance(w, dict) else str(w) for w in validation_result.get("warnings", [])]
 
-    # Default reasoning steps if not supplied
     steps = reasoning_steps or [
         "1. Loaded CAD document, extracted entities and layer structures with tag normalization.",
         "2. Analyzed text annotations, explicit dimensions, and expanded block definitions.",
@@ -59,7 +62,6 @@ def format_final_boq_response(
         "8. Executed 14 validation checks ensuring zero fabricated quantities, dimension consistency, and audit traceability.",
     ]
 
-    # Collect default assumptions
     assumed = assumptions or [
         "Floor-to-floor height assumed at standard 3.0m where explicit elevation callouts were absent.",
         "Door opening standard dimensions assumed as 0.90m x 2.10m unless explicit dimension tag present.",
@@ -67,14 +69,20 @@ def format_final_boq_response(
         "Reinforcement steel bar schedule marked NOT_AVAILABLE where bar bending schedules were not in drawing.",
     ]
 
-    return {
+    summary = {
+        "filename": filename,
+        "units": units,
+        "entity_count": entity_count,
+        "layer_count": layer_count,
+    }
+    if construction_type:
+        summary["construction_type"] = construction_type
+    if construction_subtype:
+        summary["construction_subtype"] = construction_subtype
+
+    resp = {
         "reasoning_steps": steps,
-        "drawing_summary": {
-            "filename": filename,
-            "units": units,
-            "entity_count": entity_count,
-            "layer_count": layer_count,
-        },
+        "drawing_summary": summary,
         "boq": serialized_boq,
         "warnings": warnings_list,
         "assumptions": assumed,
@@ -85,3 +93,9 @@ def format_final_boq_response(
         },
         "export_format": export_format,
     }
+    if construction_type:
+        resp["construction_type"] = construction_type
+    if construction_subtype:
+        resp["construction_subtype"] = construction_subtype
+
+    return resp

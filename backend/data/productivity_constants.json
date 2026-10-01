@@ -1,0 +1,99 @@
+{
+  "productivity_rates": {
+    "CONCRETE_PCC": {
+      "unit": "cum",
+      "mason_days": 0.1,
+      "helper_days": 0.7,
+      "bhisti_days": 0.1
+    },
+    "CONCRETE_RCC": {
+      "unit": "cum",
+      "mason_days": 0.15,
+      "helper_days": 1.2,
+      "bhisti_days": 0.2
+    },
+    "FORMWORK_SHUTTERING": {
+      "unit": "m2",
+      "carpenter_days": 0.22,
+      "helper_days": 0.22
+    },
+    "STEEL_REINFORCEMENT": {
+      "unit": "kg",
+      "barbender_days": 0.012,
+      "helper_days": 0.012
+    },
+    "AAC_BLOCK_MASONRY": {
+      "unit": "nos",
+      "mason_days": 0.0035,
+      "helper_days": 0.0045
+    },
+    "BRICK_MASONRY": {
+      "unit": "nos",
+      "mason_days": 0.0025,
+      "helper_days": 0.0035
+    },
+    "GYPSUM_PARTITION": {
+      "unit": "m2",
+      "carpenter_days": 0.18,
+      "helper_days": 0.15
+    },
+    "GLASS_ALUMINIUM": {
+      "unit": "m2",
+      "fabricator_days": 0.2,
+      "helper_days": 0.15
+    },
+    "PLASTER_INTERNAL": {
+      "unit": "m2",
+      "mason_days": 0.07,
+      "helper_days": 0.1,
+      "bhisti_days": 0.02
+    },
+    "PAINTING_INTERNAL": {
+      "unit": "m2",
+      "painter_days": 0.045,
+      "helper_days": 0.025
+    },
+    "PAINTING_EXTERNAL": {
+      "unit": "m2",
+      "painter_days": 0.055,
+      "helper_days": 0.035
+    },
+    "FLOORING_TILES": {
+      "unit": "m2",
+      "tile_layer_days": 0.1,
+      "helper_days": 0.1
+    },
+    "DOOR_INSTALLATION": {
+      "unit": "nos",
+      "carpenter_days": 0.35,
+      "helper_days": 0.35
+    },
+    "WINDOW_INSTALLATION": {
+      "unit": "nos",
+      "fabricator_days": 0.25,
+      "helper_days": 0.25
+    },
+    "WATERPROOFING": {
+      "unit": "m2",
+      "specialist_days": 0.06,
+      "helper_days": 0.08
+    }
+  },
+  "wage_rates_inr_per_day": {
+    "mason": 800.0,
+    "carpenter": 800.0,
+    "barbender": 800.0,
+    "fabricator": 800.0,
+    "tile_layer": 800.0,
+    "painter": 800.0,
+    "specialist": 800.0,
+    "helper": 800.0,
+    "bhisti": 800.0
+  },
+  "work_settings": {
+    "hours_per_day": 8.0,
+    "working_days_per_week": 6,
+    "holidays_allowance_pct": 5.0,
+    "weather_allowance_pct": 5.0
+  }
+}

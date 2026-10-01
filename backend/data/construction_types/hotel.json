@@ -1,0 +1,52 @@
+{
+  "name": "Hotel / Resort",
+  "icon": "\ud83c\udfe8",
+  "subtypes": [
+    "Business Hotel",
+    "Luxury Resort",
+    "Budget Hotel",
+    "Guest House",
+    "Serviced Apartments"
+  ],
+  "default_subtype": "Business Hotel",
+  "keywords": [
+    "guest room",
+    "suite",
+    "reception",
+    "lobby",
+    "restaurant",
+    "banquet",
+    "hotel",
+    "resort",
+    "swimming pool",
+    "pool",
+    "spa",
+    "bar",
+    "lounge",
+    "kitchen",
+    "housekeeping",
+    "linen",
+    "ballroom"
+  ],
+  "layer_patterns": [
+    ".*(HOTEL|RESORT|GUEST_ROOM|SUITE|BANQUET|RESTAURANT|SPA|POOL).*"
+  ],
+  "element_indicators": [
+    "DOOR",
+    "BATHROOM",
+    "WALL",
+    "WINDOW"
+  ],
+  "geometry_profile": {
+    "min_rooms": 6,
+    "avg_room_area_min": 15.0,
+    "avg_room_area_max": 50.0,
+    "column_span_min": 5.0,
+    "standard_floor_height": 3.2
+  },
+  "boq_rules": {
+    "default_floor_height": 3.2,
+    "flooring_priority": "MARBLE_OR_PREMIUM_TILE",
+    "wastage_multiplier": 1.05
+  }
+}

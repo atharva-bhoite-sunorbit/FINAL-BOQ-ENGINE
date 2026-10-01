@@ -1,0 +1,51 @@
+{
+  "name": "Industrial",
+  "icon": "\u2699\ufe0f",
+  "subtypes": [
+    "Manufacturing Plant",
+    "Assembly Unit",
+    "Processing Plant",
+    "Workshop Facility"
+  ],
+  "default_subtype": "Manufacturing Plant",
+  "keywords": [
+    "production",
+    "manufacturing",
+    "assembly",
+    "machine",
+    "equipment",
+    "plant",
+    "production line",
+    "processing",
+    "workshop",
+    "industrial",
+    "crane",
+    "gantry",
+    "substation",
+    "boiler",
+    "compressor",
+    "generator",
+    "effluent"
+  ],
+  "layer_patterns": [
+    ".*(IND|INDUSTRIAL|MACHINE|EQUIP|PROCESS|PLANT|MECH|CRANE|GANTRY|PIPING).*"
+  ],
+  "element_indicators": [
+    "MACHINE_FOUNDATION",
+    "BEAM",
+    "COLUMN",
+    "HEAVY_FLOOR"
+  ],
+  "geometry_profile": {
+    "min_rooms": 1,
+    "avg_room_area_min": 100.0,
+    "column_span_min": 9.0,
+    "standard_floor_height": 6.0
+  },
+  "boq_rules": {
+    "default_floor_height": 6.0,
+    "concrete_grade": "M30",
+    "flooring_priority": "TRIMIX_FLOORING",
+    "wastage_multiplier": 1.08
+  }
+}

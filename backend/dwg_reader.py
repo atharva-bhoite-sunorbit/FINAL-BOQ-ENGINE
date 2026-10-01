@@ -111,15 +111,22 @@ def convert_dwg_to_dxf(path: Path) -> Path:
     if "dwg2dxf" in conv_name:
         cmd = [converter, "-y", "-o", str(out_file), str(input_file)]
         result = subprocess.run(cmd, capture_output=True, text=True, check=False)
-        if result.returncode != 0 or not out_file.exists() or out_file.stat().st_size == 0:
+        if not out_file.exists() or out_file.stat().st_size == 0:
+            for extra_flag in (["--as", "r2018"], ["--as", "r2000"], ["-m"]):
+                retry_cmd = [converter, "-y", *extra_flag, "-o", str(out_file), str(input_file)]
+                subprocess.run(retry_cmd, capture_output=True, text=True, check=False)
+                if out_file.exists() and out_file.stat().st_size > 0:
+                    break
+
+        if not out_file.exists() or out_file.stat().st_size == 0:
             dwgread = Path(converter).parent / "dwgread.exe"
             if dwgread.exists():
                 cmd_read = [str(dwgread), "-O", "DXF", "-o", str(out_file), str(input_file)]
                 res_read = subprocess.run(cmd_read, capture_output=True, text=True, check=False)
-                if res_read.returncode != 0 and (not out_file.exists() or out_file.stat().st_size == 0):
+                if not out_file.exists() or out_file.stat().st_size == 0:
                     raise RuntimeError(f"DWG conversion failed with dwg2dxf/dwgread: {result.stderr or res_read.stderr}")
             else:
-                raise RuntimeError(f"dwg2dxf failed: {result.stderr or result.stdout}")
+                raise RuntimeError(f"dwg2dxf failed to produce valid DXF: {result.stderr or result.stdout}")
     elif "dwgread" in conv_name:
         cmd = [converter, "-O", "DXF", "-o", str(out_file), str(input_file)]
         result = subprocess.run(cmd, capture_output=True, text=True, check=False)

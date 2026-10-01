@@ -1,0 +1,46 @@
+{
+  "name": "Infrastructure",
+  "icon": "\ud83c\udf09",
+  "subtypes": [
+    "Transport Terminal / Metro Station",
+    "Bridge / Flyover Pier",
+    "Utility Substation / Water Treatment",
+    "Airport Terminal Concourse"
+  ],
+  "default_subtype": "Transport Terminal / Metro Station",
+  "keywords": [
+    "terminal",
+    "station",
+    "platform",
+    "pier",
+    "viaduct",
+    "bridge",
+    "concourse",
+    "utility",
+    "substation",
+    "treatment plant",
+    "subway",
+    "taxiway",
+    "runway",
+    "toll plaza"
+  ],
+  "layer_patterns": [
+    ".*(INFRA|TERMINAL|STATION|PLATFORM|PIER|VIADUCT|BRIDGE|UTILITY).*"
+  ],
+  "element_indicators": [
+    "PIER",
+    "PILE_CAP",
+    "HEAVY_GIRDER",
+    "MASS_CONCRETE"
+  ],
+  "geometry_profile": {
+    "min_rooms": 0,
+    "column_span_min": 15.0,
+    "standard_floor_height": 5.0
+  },
+  "boq_rules": {
+    "default_floor_height": 5.0,
+    "concrete_grade": "M40",
+    "wastage_multiplier": 1.1
+  }
+}

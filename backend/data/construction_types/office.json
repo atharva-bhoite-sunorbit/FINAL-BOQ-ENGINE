@@ -1,0 +1,51 @@
+{
+  "name": "Office Building",
+  "icon": "\ud83d\udcbc",
+  "subtypes": [
+    "Corporate Office",
+    "IT Park",
+    "Co-working Space",
+    "Branch Office"
+  ],
+  "default_subtype": "Corporate Office",
+  "keywords": [
+    "office",
+    "reception",
+    "cabin",
+    "conference",
+    "conference room",
+    "meeting room",
+    "workstation",
+    "cubicle",
+    "board room",
+    "md cabin",
+    "server room",
+    "pantry",
+    "breakout",
+    "hr cabin",
+    "discussion room",
+    "manager"
+  ],
+  "layer_patterns": [
+    ".*(OFFICE|CABIN|CONF|WORKSTATION|DESK|SERVER|RECEPTION|MEETING).*"
+  ],
+  "element_indicators": [
+    "PARTITION",
+    "GLASS_PARTITION",
+    "DRYWALL",
+    "DOOR"
+  ],
+  "geometry_profile": {
+    "min_rooms": 3,
+    "avg_room_area_min": 10.0,
+    "avg_room_area_max": 120.0,
+    "column_span_min": 6.0,
+    "standard_floor_height": 3.4
+  },
+  "boq_rules": {
+    "default_floor_height": 3.4,
+    "brick_wall_priority": "GLASS_ALUMINIUM_PARTITION",
+    "flooring_priority": "CARPET_OR_VITRIFIED",
+    "wastage_multiplier": 1.0
+  }
+}

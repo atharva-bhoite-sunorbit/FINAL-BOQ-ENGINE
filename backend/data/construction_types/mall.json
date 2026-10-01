@@ -1,0 +1,45 @@
+{
+  "name": "Mall / Shopping Center",
+  "icon": "\ud83d\udecd\ufe0f",
+  "subtypes": [
+    "Shopping Mall",
+    "Departmental Store",
+    "Retail Plaza",
+    "Commercial Promenade"
+  ],
+  "default_subtype": "Shopping Mall",
+  "keywords": [
+    "mall",
+    "shopping center",
+    "anchor store",
+    "food court",
+    "multiplex",
+    "escalator",
+    "atrium",
+    "retail store",
+    "kiosk",
+    "hypermarket",
+    "arcade",
+    "concourse",
+    "cinema"
+  ],
+  "layer_patterns": [
+    ".*(MALL|SHOPPING|ANCHOR|FOODCOURT|ATRIUM|ESCALATOR|MULTIPLEX).*"
+  ],
+  "element_indicators": [
+    "ATRIUM",
+    "WIDE_SPAN_BEAM",
+    "GLASS_PARTITION"
+  ],
+  "geometry_profile": {
+    "min_rooms": 4,
+    "avg_room_area_min": 50.0,
+    "column_span_min": 8.0,
+    "standard_floor_height": 4.5
+  },
+  "boq_rules": {
+    "default_floor_height": 4.5,
+    "flooring_priority": "GRANITE_OR_VITRIFIED",
+    "wastage_multiplier": 1.07
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "weights": {
+    "text": 0.35,
+    "layer": 0.25,
+    "geometry": 0.2,
+    "elements": 0.1,
+    "spatial": 0.1
+  },
+  "thresholds": {
+    "high_confidence": 0.8,
+    "medium_confidence": 0.6,
+    "min_detection_confidence": 0.35
+  },
+  "mixed_use": {
+    "enabled": true,
+    "min_component_score": 0.35,
+    "score_ratio_threshold": 0.7
+  },
+  "defaults": {
+    "unknown_type": "Other / Unknown",
+    "insufficient_evidence_message": "Construction type could not be determined with high confidence due to insufficient drawing evidence."
+  }
+}

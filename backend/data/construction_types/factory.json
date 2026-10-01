@@ -1,0 +1,47 @@
+{
+  "name": "Factory",
+  "icon": "\ud83c\udfed",
+  "subtypes": [
+    "Heavy Industrial Factory",
+    "Light Industrial Factory",
+    "Fabrication Yard",
+    "Textile Mill"
+  ],
+  "default_subtype": "Light Industrial Factory",
+  "keywords": [
+    "factory",
+    "shop floor",
+    "fabrication",
+    "foundry",
+    "furnace",
+    "shed",
+    "raw material",
+    "scrap yard",
+    "loading bay",
+    "conveyor",
+    "press shop",
+    "paint shop",
+    "testing rig"
+  ],
+  "layer_patterns": [
+    ".*(FACTORY|SHOPFLOOR|FABRICATION|SHED|MACHINE_FDN|EQUIPMENT).*"
+  ],
+  "element_indicators": [
+    "STEEL_FRAME",
+    "COLUMN",
+    "FOUNDATION",
+    "LOADING_BAY"
+  ],
+  "geometry_profile": {
+    "min_rooms": 1,
+    "avg_room_area_min": 150.0,
+    "column_span_min": 10.0,
+    "standard_floor_height": 7.0
+  },
+  "boq_rules": {
+    "default_floor_height": 7.0,
+    "concrete_grade": "M30",
+    "flooring_priority": "HEAVY_DUTY_EPOXY",
+    "wastage_multiplier": 1.1
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Hospital",
+  "icon": "\ud83c\udfe5",
+  "subtypes": [
+    "Multispecialty Hospital",
+    "Clinic / Nursing Home",
+    "OPD Center",
+    "Diagnostic Laboratory"
+  ],
+  "default_subtype": "Multispecialty Hospital",
+  "keywords": [
+    "icu",
+    "opd",
+    "emergency",
+    "ward",
+    "operation theatre",
+    "ot",
+    "pharmacy",
+    "nurse station",
+    "patient room",
+    "radiology",
+    "mri",
+    "ct scan",
+    "pathology",
+    "triage",
+    "casualty",
+    "doctor",
+    "sterilization",
+    "autoclave",
+    "isolation"
+  ],
+  "layer_patterns": [
+    ".*(HOSP|MED|ICU|OPD|WARD|OT|PHARM|NURSE|CLINIC|DIAGNOSTIC).*"
+  ],
+  "element_indicators": [
+    "WALL",
+    "DOOR",
+    "PARTITION",
+    "SANITARY"
+  ],
+  "geometry_profile": {
+    "min_rooms": 5,
+    "avg_room_area_min": 8.0,
+    "avg_room_area_max": 60.0,
+    "column_span_min": 5.5,
+    "standard_floor_height": 3.8
+  },
+  "boq_rules": {
+    "default_floor_height": 3.8,
+    "flooring_priority": "ANTI_BACTERIAL_VINYL",
+    "paint_priority": "ANTI_MICROBIAL_PAINT",
+    "wastage_multiplier": 1.06
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "Commercial",
+  "icon": "\ud83c\udfe2",
+  "subtypes": [
+    "Retail Store",
+    "Showroom",
+    "Commercial Complex",
+    "Business Plaza",
+    "Bank Branch"
+  ],
+  "default_subtype": "Commercial Complex",
+  "keywords": [
+    "retail",
+    "showroom",
+    "shop",
+    "store",
+    "commercial",
+    "billing",
+    "cashier",
+    "display",
+    "atrium",
+    "mall",
+    "kiosk",
+    "boutique",
+    "market",
+    "customer area"
+  ],
+  "layer_patterns": [
+    ".*(COMM|RETAIL|SHOP|SHOWROOM|DISPLAY|BILLING|STORE_AREA).*"
+  ],
+  "element_indicators": [
+    "PARTITION",
+    "GLASS_PARTITION",
+    "WALL",
+    "DOOR"
+  ],
+  "geometry_profile": {
+    "min_rooms": 1,
+    "avg_room_area_min": 20.0,
+    "avg_room_area_max": 500.0,
+    "column_span_min": 6.0,
+    "standard_floor_height": 3.6
+  },
+  "boq_rules": {
+    "default_floor_height": 3.6,
+    "brick_wall_priority": "GYPSUM_PARTITION",
+    "flooring_priority": "VITRIFIED_TILES",
+    "wastage_multiplier": 1.05
+  }
+}
